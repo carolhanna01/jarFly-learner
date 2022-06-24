@@ -71,6 +71,7 @@ public abstract class Search<G extends EditOperation> {
 	protected Logger logger = Logger.getLogger(Search.class);
 
 	ReplacementModel rm;
+	MutationOperatorsRL muRL;
 
 	public static final ConfigurationBuilder.RegistryToken token =
 			ConfigurationBuilder.getToken();
@@ -153,6 +154,9 @@ public abstract class Search<G extends EditOperation> {
 		if(Search.model.equalsIgnoreCase("probabilistic")){
 			rm = new ReplacementModel();
 			rm.populateModel(modelPath);
+		}
+		else if(Search.model.equalsIgnoreCase("PM")){
+			muRL = new MutationOperatorsRL();
 		}
 	}
 
@@ -319,6 +323,8 @@ public abstract class Search<G extends EditOperation> {
 			return availableMutations;
 		}else if(Search.model.equalsIgnoreCase("probabilistic")){
 			return rm.rescaleMutationsBasedOnModel(availableMutations);
+		}else if(Search.model.equalsIgnoreCase("PM")) {
+			return muRL.rescaleMutationsBasedOnPM(availableMutations);
 		}
 		return null;
 	}

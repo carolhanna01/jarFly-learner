@@ -48,6 +48,11 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			Representation<G> newItem = original.copy();
 			this.mutate(newItem);
 			initialPopulation.add(newItem);
+			
+			if(Search.model.equalsIgnoreCase("PM")){
+				fitnessEngine.testFitness(0, newItem);
+				muRL.operatorCreditAssignment(newItem);		
+			}
 		}
 
 		for (Representation<G> item : initialPopulation) {
@@ -105,6 +110,10 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			for (Representation<G> item : incomingPopulation) {
 				Representation<G> newItem = original.copy();
 				this.mutate(item);
+				if(Search.model.equalsIgnoreCase("PM")){
+					fitnessEngine.testFitness(0, newItem);
+					muRL.operatorCreditAssignment(newItem);		
+				}
 			}
 
 			// step 4: fitness
