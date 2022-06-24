@@ -26,16 +26,28 @@ public class MutationOperatorsRL {
 	// Raw Fitness
 	public void operatorCreditAssignment(Representation rep) {
 		
-		double currFitness = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
+		if (genome.size() == 0) { //TODO: fishy- Make it an assert again + figure out why it's failing OffByOne
+			return;
+		}
+
+		double currFitness = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
 		String currEdit = genome.get(genome.size() - 1).toString();
 		
 		if (currEdit.contains("Append")) {
+			System.out.println("Updating append fitness");
+			System.out.println(currFitness);
 			this.appendRawReward = currFitness;
 		} else if (currEdit.contains("Delete")) {
+			System.out.println("Updating delete fitness");
+			System.out.println(currFitness);
 			this.deleteRawReward = currFitness;
 		} else if (currEdit.contains("Replace")) {
+			System.out.println("Updating replace fitness");
+			System.out.println(currFitness);
 			this.replaceRawReward = currFitness;
+		} else {
+			System.out.println("None!!!!!!!!!!!!!");
 		}
 		
 		return;
@@ -48,25 +60,33 @@ public class MutationOperatorsRL {
 		List<WeightedMutation> retVal = new ArrayList<WeightedMutation>();
 		double totalReward = this.appendRawReward + this.deleteRawReward + this.replaceRawReward;
 		
+		if (totalReward == 0) {
+			this.appendRawReward = 1;
+			this.deleteRawReward = 1;
+			this.replaceRawReward = 1;
+			totalReward = 3;
+		}
+		
+		
 		for(WeightedMutation wmut: availableMutations){
 			Mutation mutation = (Mutation) ((WeightedMutation)wmut).getLeft();
 			double prob = 0;
 			if(mutation == Mutation.REPLACE){
 				prob = this.replaceRawReward / totalReward;
-//				System.out.println(mutation);
-//				System.out.println(prob);
+				System.out.println(mutation);
+				System.out.println(prob);
 			}else if(mutation == Mutation.APPEND){
 				prob = this.appendRawReward / totalReward;
-//				System.out.println(mutation);
-//				System.out.println(prob);
+				System.out.println(mutation);
+				System.out.println(prob);
 			}else if(mutation == Mutation.DELETE){
 				prob = this.deleteRawReward / totalReward;
-//				System.out.println(mutation);
-//				System.out.println(prob);
+				System.out.println(mutation);
+				System.out.println(prob);
 			}else if(mutation == Mutation.SWAP){
 				prob = this.replaceRawReward / totalReward;
-//				System.out.println(mutation);
-//				System.out.println(prob);
+				System.out.println(mutation);
+				System.out.println(prob);
 			}else{
 				//TODO: See if we want to extend to other operators (the PAR templates)
 			}
