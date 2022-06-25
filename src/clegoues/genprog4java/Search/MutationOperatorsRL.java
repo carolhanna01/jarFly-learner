@@ -32,8 +32,14 @@ public class MutationOperatorsRL {
 	double appendQuality;
 	double deleteQuality;
 	double replaceQuality;
-	/*************************************************************/
-
+	/***************************************************************************/
+	
+	/******  For Strategy 3: adaptive pursuit operator selection  ******/
+	double Pmax;
+	double beta;
+	
+	/***************************************************************************/
+	
 	public MutationOperatorsRL() {
 		
 		this.appendRawReward = 1;
@@ -51,6 +57,9 @@ public class MutationOperatorsRL {
 		this.appendQuality = 1;
 		this.deleteQuality = 1;
 		this.replaceQuality = 1;
+		
+		this.Pmax = 1 - (this.operators_num - 1) * this.Pmin;
+		this.beta = 0.01;
 	}
 	
 	private void rawRewardProbability(Representation rep) {
@@ -130,12 +139,74 @@ public class MutationOperatorsRL {
 	
 	}
 	
+	private double pursueMaximalQuality(double maxQuality, double quality, double prob) {
+		if (maxQuality == quality) {
+			return prob + this.beta * (this.Pmax - prob);
+		} else {
+			return prob + this.beta * (this.Pmin - prob);
+		}
+	}
+	
+	private void adaptivePursuit(Representation rep) {
+		
+		System.out.println("DEBUGGGGG!! I'm updating the probabilities");
+		
+		ArrayList<JavaEditOperation> genome =  rep.getGenome();
+		if (genome.size() == 0) {
+			return;
+		}
+		
+		// Raw Reward
+		double reward = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
+		String editType = genome.get(genome.size() - 1).toString();
+		
+		if (editType.contains("Append")) {
+			System.out.println("Updating append fitness");
+			System.out.println(reward);
+			double quality = this.appendQuality;
+			this.appendQuality = quality + alpha * (reward - quality);
+			
+		} else if (editType.contains("Delete")) {
+			System.out.println("Updating delete fitness");
+			System.out.println(reward);
+			double quality = this.deleteQuality;
+			this.deleteQuality = quality + alpha * (reward - quality);
+
+		} else if (editType.contains("Replace")) {
+			System.out.println("Updating replace fitness");
+			System.out.println(reward);
+			double quality = this.replaceQuality;
+			this.replaceQuality = quality + alpha * (reward - quality);
+
+		} else {
+			//TODO: make this throw an exception instead
+			System.out.println("Unexpected Mutation Operator");
+		}
+		
+		double maxQuality = Math.max(this.appendQuality, Math.max(this.deleteQuality, this.replaceQuality));
+		
+		System.out.println("START DEBUG");
+		System.out.println(maxQuality);
+		System.out.println(this.appendQuality);
+		System.out.println(this.deleteQuality);
+		System.out.println(this.replaceQuality);
+		System.out.println("ENDDEBUG");
+
+		this.appendProb = pursueMaximalQuality(maxQuality, this.appendQuality, this.appendProb);
+		this.deleteProb = pursueMaximalQuality(maxQuality, this.deleteQuality, this.deleteProb);
+		this.replaceProb = pursueMaximalQuality(maxQuality, this.replaceQuality, this.replaceProb);
+
+		return;
+	}
+	
 	public void updateOperatorProbabilities(Representation rep) {
 		
-		if (Search.model.equalsIgnoreCase("rawReward")) {
+		if (Search.model.endsWith("rawReward")) {
 			rawRewardProbability(rep);
-		} else if (Search.model.equalsIgnoreCase("PM")) {
+		} else if (Search.model.endsWith("PM")) {
 			probabilityMatching(rep);
+		} else if (Search.model.endsWith("AP")) {
+			adaptivePursuit(rep);
 		} 
 	}
 	
