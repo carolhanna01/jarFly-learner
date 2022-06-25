@@ -154,8 +154,7 @@ public abstract class Search<G extends EditOperation> {
 		if(Search.model.equalsIgnoreCase("probabilistic")){
 			rm = new ReplacementModel();
 			rm.populateModel(modelPath);
-		}
-		else if(Search.model.equalsIgnoreCase("PM")){
+		} else if(Search.model.startsWith("RL")) {
 			muRL = new MutationOperatorsRL();
 		}
 	}
@@ -323,9 +322,10 @@ public abstract class Search<G extends EditOperation> {
 			return availableMutations;
 		}else if(Search.model.equalsIgnoreCase("probabilistic")){
 			return rm.rescaleMutationsBasedOnModel(availableMutations);
-		}else if(Search.model.equalsIgnoreCase("PM")) {
-			return muRL.rescaleMutationsBasedOnPM(availableMutations);
+		}else if(Search.model.startsWith("RL")) {
+			return muRL.rescaleMutationsBasedOnRL(availableMutations);
 		}
+		
 		return null;
 	}
 
