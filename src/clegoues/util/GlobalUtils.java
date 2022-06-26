@@ -74,6 +74,18 @@ public class GlobalUtils {
 		return null;
 	}
 	
+	public static Pair<?,Double> chooseMaxWeighted(List<Pair<?,Double>> atoms) {
+		assert(atoms.size() > 0);
+		Pair<?,Double> chosen = atoms.get(0);
+		double max = Integer.MIN_VALUE;
+		for(Pair<?,Double> atom : atoms) {
+			if(atom.getRight() > max) {
+				chosen = atom;
+			}
+		}
+		return chosen;
+	}
+	
 	public static Pair<?,Double> chooseOneWeighted(ArrayList<Pair<?,Double>> atoms, double weight) {
 		assert(atoms.size() > 0);
 		double totalWeight = 0.0;

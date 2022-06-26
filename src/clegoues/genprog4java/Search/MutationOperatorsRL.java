@@ -23,7 +23,6 @@ public class MutationOperatorsRL {
 
 	/******  For Strategy 2: probability matching operator selection  ******/
 	// Parameters
-	// TODO: tune + make not hard coded
 	double Pmin;
 	double operators_num;
 	double alpha;
@@ -41,8 +40,22 @@ public class MutationOperatorsRL {
 	
 	/***************************************************************************/
 	
+	/******  For Strategy 3: adaptive pursuit operator selection  ******/
+	double appendChosenCount;
+	double deleteChosenCount;
+	double replaceChosenCount;
+
+	double appendTotalReward;
+	double deleteTotalReward;
+	double replaceTotalReward;
+	
+	double exploreExploitTradeoff; 
+	/***************************************************************************/
+
 	public MutationOperatorsRL() {
 		
+		// TODO: fine tune the annotated parameters!
+
 		this.appendRawReward = 1;
 		this.deleteRawReward = 1;
 		this.replaceRawReward = 1;
@@ -62,6 +75,16 @@ public class MutationOperatorsRL {
 		this.Pmax = 1 - ((this.operators_num - 1) * this.Pmin);
 		this.beta = 0.01; // Learning rate: fine tune
 		this.maxFound = false;
+		
+		this.appendChosenCount = 0;
+		this.deleteChosenCount = 0;
+		this.replaceChosenCount = 0;
+
+		this.appendTotalReward = 0;
+		this.deleteTotalReward = 0;
+		this.replaceTotalReward = 0;
+		
+		this.exploreExploitTradeoff = 0.3; //constant balancing exploration-exploitation tradeoff: finetune
 	}
 	
 	private void rawRewardProbability(Representation rep) {
@@ -109,28 +132,28 @@ public class MutationOperatorsRL {
 		double reward = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
 		String editType = genome.get(genome.size() - 1).toString();
 		
-		double quality_sum = this.appendQuality + this.deleteQuality + this.replaceQuality;
+		double qualitySum = this.appendQuality + this.deleteQuality + this.replaceQuality;
 
 		if (editType.contains("Append")) {
-			System.out.println("Updating append fitness");
-			System.out.println(reward);
+//			System.out.println("Updating append fitness");
+//			System.out.println(reward);
 			double quality = this.appendQuality;
 			this.appendQuality = quality + alpha * (reward - quality);
-			this.appendProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ quality_sum);
+			this.appendProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ qualitySum);
 			
 		} else if (editType.contains("Delete")) {
-			System.out.println("Updating delete fitness");
-			System.out.println(reward);
+//			System.out.println("Updating delete fitness");
+//			System.out.println(reward);
 			double quality = this.deleteQuality;
 			this.deleteQuality = quality + alpha * (reward - quality);
-			this.deleteProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ quality_sum);
+			this.deleteProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ qualitySum);
 
 		} else if (editType.contains("Replace")) {
-			System.out.println("Updating replace fitness");
-			System.out.println(reward);
+//			System.out.println("Updating replace fitness");
+//			System.out.println(reward);
 			double quality = this.replaceQuality;
 			this.replaceQuality = quality + alpha * (reward - quality);
-			this.replaceProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ quality_sum);
+			this.replaceProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ qualitySum);
 
 		} else {
 			//TODO: make this throw an exception instead
@@ -164,20 +187,20 @@ public class MutationOperatorsRL {
 		String editType = genome.get(genome.size() - 1).toString();
 		
 		if (editType.contains("Append")) {
-			System.out.println("Updating append fitness");
-			System.out.println(reward);
+//			System.out.println("Updating append fitness");
+//			System.out.println(reward);
 			double quality = this.appendQuality;
 			this.appendQuality = quality + alpha * (reward - quality);
 			
 		} else if (editType.contains("Delete")) {
-			System.out.println("Updating delete fitness");
-			System.out.println(reward);
+//			System.out.println("Updating delete fitness");
+//			System.out.println(reward);
 			double quality = this.deleteQuality;
 			this.deleteQuality = quality + alpha * (reward - quality);
 
 		} else if (editType.contains("Replace")) {
-			System.out.println("Updating replace fitness");
-			System.out.println(reward);
+//			System.out.println("Updating replace fitness");
+//			System.out.println(reward);
 			double quality = this.replaceQuality;
 			this.replaceQuality = quality + alpha * (reward - quality);
 
@@ -188,12 +211,12 @@ public class MutationOperatorsRL {
 		
 		double maxQuality = Math.max(this.appendQuality, Math.max(this.deleteQuality, this.replaceQuality));
 		
-		System.out.println("START DEBUG");
-		System.out.println(maxQuality);
-		System.out.println(this.appendQuality);
-		System.out.println(this.deleteQuality);
-		System.out.println(this.replaceQuality);
-		System.out.println("ENDDEBUG");
+//		System.out.println("START DEBUG");
+//		System.out.println(maxQuality);
+//		System.out.println(this.appendQuality);
+//		System.out.println(this.deleteQuality);
+//		System.out.println(this.replaceQuality);
+//		System.out.println("ENDDEBUG");
 
 		this.appendProb = pursueMaximalQuality(maxQuality, this.appendQuality, this.appendProb);
 		this.deleteProb = pursueMaximalQuality(maxQuality, this.deleteQuality, this.deleteProb);
@@ -204,8 +227,50 @@ public class MutationOperatorsRL {
 		return;
 	}
 	
-	private void dynamicMultiArmedBandit(Representation rep) {
+	private double upperConfidenceBound(double chosenCount, double totalReward) {
+		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
+		return (totalReward / chosenCount) + this.exploreExploitTradeoff * Math.sqrt((Math.log(chosenCountTotal)/ chosenCount));
+	}
+	
+	private void multiArmedBandit(Representation rep) {
+		ArrayList<JavaEditOperation> genome =  rep.getGenome();
+		if (genome.size() == 0) {
+			return;
+		}
 		
+		// Raw Reward
+		double reward = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
+		String editType = genome.get(genome.size() - 1).toString();
+		
+		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
+		
+		if (editType.contains("Append")) {
+			System.out.println("Updating append fitness");
+			System.out.println(reward);
+			this.appendChosenCount += 1;
+			this.appendTotalReward += reward;
+			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalReward);
+			
+		} else if (editType.contains("Delete")) {
+			System.out.println("Updating delete fitness");
+			System.out.println(reward);
+			this.deleteChosenCount += 1;
+			this.deleteTotalReward += reward;
+			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalReward);
+
+		} else if (editType.contains("Replace")) {
+			System.out.println("Updating replace fitness");
+			System.out.println(reward);
+			this.replaceChosenCount += 1;
+			this.replaceTotalReward += reward;
+			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalReward);
+
+		} else {
+			//TODO: make this throw an exception instead
+			System.out.println("Unexpected Mutation Operator");
+		}
+		
+		return;	
 	}
 	
 	public void updateOperatorProbabilities(Representation rep) {
@@ -216,8 +281,8 @@ public class MutationOperatorsRL {
 			probabilityMatching(rep);
 		} else if (Search.model.endsWith("AP")) {
 			adaptivePursuit(rep);
-		} else if (Search.model.endsWith("DMAB")) {
-			dynamicMultiArmedBandit(rep);
+		} else if (Search.model.endsWith("MAB")) {
+			multiArmedBandit(rep);
 		} 
 	}
 	
