@@ -37,6 +37,7 @@ public class MutationOperatorsRL {
 	/******  For Strategy 3: adaptive pursuit operator selection  ******/
 	double Pmax;
 	double beta;
+	boolean maxFound;
 	
 	/***************************************************************************/
 	
@@ -46,9 +47,9 @@ public class MutationOperatorsRL {
 		this.deleteRawReward = 1;
 		this.replaceRawReward = 1;
 		
-		this.Pmin = 0.01;
-		this.operators_num = 3;
-		this.alpha = 0.01;
+		this.Pmin = 0.1; // fine tune (1/2K was recommended)
+		this.operators_num = Search.availableMutations.size();
+		this.alpha = 0.01; // Adaption rate: fine tune
 		
 		this.appendProb = 1 / this.operators_num;
 		this.deleteProb = 1 / this.operators_num;
@@ -58,8 +59,9 @@ public class MutationOperatorsRL {
 		this.deleteQuality = 1;
 		this.replaceQuality = 1;
 		
-		this.Pmax = 1 - (this.operators_num - 1) * this.Pmin;
-		this.beta = 0.01;
+		this.Pmax = 1 - ((this.operators_num - 1) * this.Pmin);
+		this.beta = 0.01; // Learning rate: fine tune
+		this.maxFound = false;
 	}
 	
 	private void rawRewardProbability(Representation rep) {
@@ -140,17 +142,18 @@ public class MutationOperatorsRL {
 	}
 	
 	private double pursueMaximalQuality(double maxQuality, double quality, double prob) {
-		if (maxQuality == quality) {
+		
+		if (maxQuality == quality && !this.maxFound) {
+			this.maxFound = true;
 			return prob + this.beta * (this.Pmax - prob);
+			
 		} else {
 			return prob + this.beta * (this.Pmin - prob);
 		}
 	}
 	
 	private void adaptivePursuit(Representation rep) {
-		
-		System.out.println("DEBUGGGGG!! I'm updating the probabilities");
-		
+				
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
 		if (genome.size() == 0) {
 			return;
@@ -195,8 +198,14 @@ public class MutationOperatorsRL {
 		this.appendProb = pursueMaximalQuality(maxQuality, this.appendQuality, this.appendProb);
 		this.deleteProb = pursueMaximalQuality(maxQuality, this.deleteQuality, this.deleteProb);
 		this.replaceProb = pursueMaximalQuality(maxQuality, this.replaceQuality, this.replaceProb);
-
+		
+		this.maxFound = false;
+		
 		return;
+	}
+	
+	private void dynamicMultiArmedBandit(Representation rep) {
+		
 	}
 	
 	public void updateOperatorProbabilities(Representation rep) {
@@ -207,6 +216,8 @@ public class MutationOperatorsRL {
 			probabilityMatching(rep);
 		} else if (Search.model.endsWith("AP")) {
 			adaptivePursuit(rep);
+		} else if (Search.model.endsWith("DMAB")) {
+			dynamicMultiArmedBandit(rep);
 		} 
 	}
 	
