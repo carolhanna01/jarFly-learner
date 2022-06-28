@@ -111,8 +111,8 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 				Representation<G> newItem = original.copy();
 				this.mutate(item);
 				if(Search.model.startsWith("RL")) {
-					fitnessEngine.testFitness(0, newItem);
-					muRL.updateOperatorProbabilities(newItem);		
+					fitnessEngine.testFitness(0, item);
+					muRL.updateOperatorProbabilities(item);		
 				}
 			}
 
