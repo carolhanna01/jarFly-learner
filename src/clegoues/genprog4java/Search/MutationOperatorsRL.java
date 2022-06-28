@@ -50,6 +50,14 @@ public class MutationOperatorsRL {
 	double replaceTotalReward;
 	
 	double exploreExploitTradeoff; 
+	
+	
+	// For the Page-Hinkley (PH) test:
+	double ph_gamma;
+	double ph_delta;
+	double current_m;
+	double max_m;
+	
 	/***************************************************************************/
 
 	public MutationOperatorsRL() {
@@ -84,7 +92,12 @@ public class MutationOperatorsRL {
 		this.deleteTotalReward = 0;
 		this.replaceTotalReward = 0;
 		
-		this.exploreExploitTradeoff = 0.3; //constant balancing exploration-exploitation tradeoff: finetune
+		this.exploreExploitTradeoff = 0.3; // Constant balancing exploration-exploitation tradeoff: fine-tune
+		
+		this.ph_gamma = 0.15; // For sensitivity tradeoff: fine-tune 
+		this.ph_delta = 0.15; // For test robustness: fine-tune
+		this.current_m = 0;
+		this.max_m = 0;
 	}
 	
 	private void rawRewardProbability(Representation rep) {
@@ -232,6 +245,46 @@ public class MutationOperatorsRL {
 		return (totalReward / chosenCount) + this.exploreExploitTradeoff * Math.sqrt((Math.log(chosenCountTotal)/ chosenCount));
 	}
 	
+	private boolean pageHinkley(double reward) {
+		
+		System.out.println("Activating Page Hinkley test");
+		
+		double totalReward = this.appendTotalReward + this.deleteTotalReward + this.replaceTotalReward;
+		double totalChosenCount = this.appendChosenCount + this.deleteChosenCount+ this.replaceChosenCount;
+		double overallAverageReward = totalReward / totalChosenCount;
+		this.current_m += reward - overallAverageReward + this.ph_delta;
+		
+		if(this.current_m > this.max_m) {
+			this.max_m = this.current_m;
+		}
+		
+		if( Math.abs(this.max_m - this.current_m)  > this.ph_gamma) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void restartDMAB() {
+		
+		System.out.println("Restarting the DMAB Algorithm");
+		
+		this.appendChosenCount = 0;
+		this.deleteChosenCount = 0;
+		this.replaceChosenCount = 0;
+
+		this.appendTotalReward = 0;
+		this.deleteTotalReward = 0;
+		this.replaceTotalReward = 0;
+		
+		this.appendProb = 1 / this.operators_num;
+		this.deleteProb = 1 / this.operators_num;
+		this.replaceProb = 1 / this.operators_num;
+		
+		this.current_m = 0;
+		this.max_m = 0;
+	}
+	
 	private void multiArmedBandit(Representation rep) {
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
 		if (genome.size() == 0) {
@@ -270,8 +323,15 @@ public class MutationOperatorsRL {
 			System.out.println("Unexpected Mutation Operator");
 		}
 		
+		if (Search.model.endsWith("DMAB")) {
+			if(pageHinkley(reward)) {
+				restartDMAB();
+			}
+		}
+		
 		return;	
 	}
+	
 	
 	public void updateOperatorProbabilities(Representation rep) {
 		
