@@ -16,9 +16,9 @@ public class MutationOperatorsRL {
 	double replaceProb; 
 	
 	/*****  For Strategy 1: raw reward probability operator selection  *****/
-	double appendRawReward;
-	double deleteRawReward;
-	double replaceRawReward; 
+	double appendReward;
+	double deleteReward;
+	double replaceReward; 
 	/***************************************************************************/
 
 	/******  For Strategy 2: probability matching operator selection  ******/
@@ -64,9 +64,9 @@ public class MutationOperatorsRL {
 		
 		// TODO: fine tune the annotated parameters!
 
-		this.appendRawReward = 1;
-		this.deleteRawReward = 1;
-		this.replaceRawReward = 1;
+		this.appendReward = 1;
+		this.deleteReward = 1;
+		this.replaceReward = 1;
 		
 		this.Pmin = 0.1; // fine tune (1/2K was recommended)
 		this.operators_num = Search.availableMutations.size();
@@ -100,6 +100,84 @@ public class MutationOperatorsRL {
 		this.max_m = 0;
 	}
 	
+	
+	/***************************************************************************/
+
+	/***********************   Helper Functions  *******************************/
+	
+	
+	// Helper function for the adaptive pursuit strategy: implements algorithm formula
+	
+	private double pursueMaximalQuality(double maxQuality, double quality, double prob) {
+		
+		if (maxQuality == quality && !this.maxFound) {
+			this.maxFound = true;
+			return prob + this.beta * (this.Pmax - prob);
+			
+		} else {
+			return prob + this.beta * (this.Pmin - prob);
+		}
+	}
+	
+	
+	// Helper function for the MAB strategy: implements UCB algorithm
+	
+	private double upperConfidenceBound(double chosenCount, double totalReward) {
+		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
+		return (totalReward / chosenCount) + this.exploreExploitTradeoff * Math.sqrt((Math.log(chosenCountTotal)/ chosenCount));
+	}
+	
+	
+	// Helper function for the Dynamic MAB strategy: implements Page-Hinkley statistical test
+	
+	private boolean pageHinkley(double reward) {
+		
+//		System.out.println("Activating Page Hinkley test");
+		
+		double totalReward = this.appendTotalReward + this.deleteTotalReward + this.replaceTotalReward;
+		double totalChosenCount = this.appendChosenCount + this.deleteChosenCount+ this.replaceChosenCount;
+		double overallAverageReward = totalReward / totalChosenCount;
+		this.current_m += reward - overallAverageReward + this.ph_delta;
+		
+		if(this.current_m > this.max_m) {
+			this.max_m = this.current_m;
+		}
+		
+		if( Math.abs(this.max_m - this.current_m)  > this.ph_gamma) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	// Helper function for the Dynamic MAB strategy: re-initialises the algorithm parameters (after PH test detects best operator changed)
+	
+	private void restartDMAB() {
+		
+//		System.out.println("Restarting the DMAB Algorithm");
+		
+		this.appendChosenCount = 0;
+		this.deleteChosenCount = 0;
+		this.replaceChosenCount = 0;
+
+		this.appendTotalReward = 0;
+		this.deleteTotalReward = 0;
+		this.replaceTotalReward = 0;
+		
+		this.appendProb = 1 / this.operators_num;
+		this.deleteProb = 1 / this.operators_num;
+		this.replaceProb = 1 / this.operators_num;
+		
+		this.current_m = 0;
+		this.max_m = 0;
+	}
+	
+	/***************************************************************************/
+
+
+	/***************************   Strategy 1   ********************************/
+	
 	private void rawRewardProbability(Representation rep) {
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
 		if (genome.size() == 0) { //TODO: fishy- Make it an assert again + figure out why it's failing OffByOne
@@ -112,27 +190,29 @@ public class MutationOperatorsRL {
 		if (currEdit.contains("Append")) {
 //			System.out.println("Updating append fitness");
 //			System.out.println(currFitness);
-			this.appendRawReward = currFitness;
-			double totalReward = this.appendRawReward + this.deleteRawReward + this.replaceRawReward;
-			this.appendProb = this.appendRawReward / totalReward;
+			this.appendReward = currFitness;
+			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
+			this.appendProb = this.appendReward / totalReward;
 			
 		} else if (currEdit.contains("Delete")) {
 //			System.out.println("Updating delete fitness");
 //			System.out.println(currFitness);
-			this.deleteRawReward = currFitness;
-			double totalReward = this.appendRawReward + this.deleteRawReward + this.replaceRawReward;
-			this.deleteProb = this.deleteRawReward / totalReward;
+			this.deleteReward = currFitness;
+			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
+			this.deleteProb = this.deleteReward / totalReward;
 			
 		} else if (currEdit.contains("Replace")) {
 //			System.out.println("Updating replace fitness");
 //			System.out.println(currFitness);
-			this.replaceRawReward = currFitness;
-			double totalReward = this.appendRawReward + this.deleteRawReward + this.replaceRawReward;
-			this.replaceProb = this.replaceRawReward / totalReward;
+			this.replaceReward = currFitness;
+			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
+			this.replaceProb = this.replaceReward / totalReward;
 		}
 		
 		return;
 	}
+	
+	/***************************   Strategy 2   ********************************/
 	
 	private void probabilityMatching(Representation rep) {
 		
@@ -141,8 +221,7 @@ public class MutationOperatorsRL {
 			return;
 		}
 		
-		// Raw Reward
-		double reward = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
+		double reward = rep.getFitness(); 
 		String editType = genome.get(genome.size() - 1).toString();
 		
 		double qualitySum = this.appendQuality + this.deleteQuality + this.replaceQuality;
@@ -177,17 +256,8 @@ public class MutationOperatorsRL {
 	
 	}
 	
-	private double pursueMaximalQuality(double maxQuality, double quality, double prob) {
-		
-		if (maxQuality == quality && !this.maxFound) {
-			this.maxFound = true;
-			return prob + this.beta * (this.Pmax - prob);
-			
-		} else {
-			return prob + this.beta * (this.Pmin - prob);
-		}
-	}
-	
+	/***************************   Strategy 3   ********************************/
+
 	private void adaptivePursuit(Representation rep) {
 				
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
@@ -195,8 +265,7 @@ public class MutationOperatorsRL {
 			return;
 		}
 		
-		// Raw Reward
-		double reward = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
+		double reward = rep.getFitness(); 	
 		String editType = genome.get(genome.size() - 1).toString();
 		
 		if (editType.contains("Append")) {
@@ -223,13 +292,6 @@ public class MutationOperatorsRL {
 		}
 		
 		double maxQuality = Math.max(this.appendQuality, Math.max(this.deleteQuality, this.replaceQuality));
-		
-//		System.out.println("START DEBUG");
-//		System.out.println(maxQuality);
-//		System.out.println(this.appendQuality);
-//		System.out.println(this.deleteQuality);
-//		System.out.println(this.replaceQuality);
-//		System.out.println("ENDDEBUG");
 
 		this.appendProb = pursueMaximalQuality(maxQuality, this.appendQuality, this.appendProb);
 		this.deleteProb = pursueMaximalQuality(maxQuality, this.deleteQuality, this.deleteProb);
@@ -240,59 +302,15 @@ public class MutationOperatorsRL {
 		return;
 	}
 	
-	private double upperConfidenceBound(double chosenCount, double totalReward) {
-		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
-		return (totalReward / chosenCount) + this.exploreExploitTradeoff * Math.sqrt((Math.log(chosenCountTotal)/ chosenCount));
-	}
-	
-	private boolean pageHinkley(double reward) {
-		
-		System.out.println("Activating Page Hinkley test");
-		
-		double totalReward = this.appendTotalReward + this.deleteTotalReward + this.replaceTotalReward;
-		double totalChosenCount = this.appendChosenCount + this.deleteChosenCount+ this.replaceChosenCount;
-		double overallAverageReward = totalReward / totalChosenCount;
-		this.current_m += reward - overallAverageReward + this.ph_delta;
-		
-		if(this.current_m > this.max_m) {
-			this.max_m = this.current_m;
-		}
-		
-		if( Math.abs(this.max_m - this.current_m)  > this.ph_gamma) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private void restartDMAB() {
-		
-		System.out.println("Restarting the DMAB Algorithm");
-		
-		this.appendChosenCount = 0;
-		this.deleteChosenCount = 0;
-		this.replaceChosenCount = 0;
+	/***************************   Strategy 4   ********************************/
 
-		this.appendTotalReward = 0;
-		this.deleteTotalReward = 0;
-		this.replaceTotalReward = 0;
-		
-		this.appendProb = 1 / this.operators_num;
-		this.deleteProb = 1 / this.operators_num;
-		this.replaceProb = 1 / this.operators_num;
-		
-		this.current_m = 0;
-		this.max_m = 0;
-	}
-	
 	private void multiArmedBandit(Representation rep) {
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
 		if (genome.size() == 0) {
 			return;
 		}
 		
-		// Raw Reward
-		double reward = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
+		double reward = rep.getFitness();	
 		String editType = genome.get(genome.size() - 1).toString();
 		
 		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
@@ -333,6 +351,8 @@ public class MutationOperatorsRL {
 	}
 	
 	
+	// Activates the specified algorithm
+	
 	public void updateOperatorProbabilities(Representation rep) {
 		
 		if (Search.model.endsWith("rawReward")) {
@@ -342,10 +362,13 @@ public class MutationOperatorsRL {
 		} else if (Search.model.endsWith("AP")) {
 			adaptivePursuit(rep);
 		} else if (Search.model.endsWith("MAB")) {
-			multiArmedBandit(rep);
+			multiArmedBandit(rep); // For both MAB and DMAB. Differentiation in conditional inside the function
 		} 
 	}
 	
+	
+	
+	// Assigns the saved class probabilities to the  operators
 	
 	public List<WeightedMutation> rescaleMutationsBasedOnRL(List<WeightedMutation> availableMutations) {
 		assert(availableMutations.size() > 0);
