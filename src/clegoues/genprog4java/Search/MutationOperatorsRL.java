@@ -173,6 +173,42 @@ public class MutationOperatorsRL {
 		this.max_m = 0;
 	}
 	
+	// Returns the reward value based on the specified reward type
+	private double getReward(Representation rep, String editType) {	
+		double fitness = rep.getFitness();
+		
+		if (editType.contains("Append")){
+			this.appendChosenCount += 1;
+			this.appendTotalReward += fitness;
+			if (Search.rewardType.startsWith("average")) {
+				return this.appendTotalReward / this.appendChosenCount;
+			} else if (Search.rewardType.startsWith("extreme")) {
+				//TODO
+			}
+			
+		} else if (editType.contains("Delete")){
+			this.deleteChosenCount += 1;
+			this.deleteTotalReward += fitness;
+			if (Search.rewardType.startsWith("average")) {
+				return this.deleteTotalReward / this.deleteChosenCount;
+			} else if (Search.rewardType.startsWith("extreme")) {
+				//TODO
+			}
+			
+		} else if (editType.contains("Replace")){
+			this.replaceChosenCount += 1;
+			this.replaceTotalReward += fitness;
+			if (Search.rewardType.startsWith("average")) {
+				return this.replaceTotalReward / this.replaceChosenCount;
+			} else if (Search.rewardType.startsWith("extreme")) {
+				//TODO
+			}
+		}
+
+		return fitness; // Default is raw fitness
+		
+	}
+	
 	/***************************************************************************/
 
 
@@ -184,27 +220,27 @@ public class MutationOperatorsRL {
 			return;
 		}
 
-		double currFitness = rep.getFitness(); //testFitness function in runAlgorithm calls setFitness- should be safe 		
-		String currEdit = genome.get(genome.size() - 1).toString();
+		String editType = genome.get(genome.size() - 1).toString();
+		double reward = getReward(rep, editType);
 		
-		if (currEdit.contains("Append")) {
+		if (editType.contains("Append")) {
 //			System.out.println("Updating append fitness");
 //			System.out.println(currFitness);
-			this.appendReward = currFitness;
+			this.appendReward = reward;
 			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
 			this.appendProb = this.appendReward / totalReward;
 			
-		} else if (currEdit.contains("Delete")) {
+		} else if (editType.contains("Delete")) {
 //			System.out.println("Updating delete fitness");
 //			System.out.println(currFitness);
-			this.deleteReward = currFitness;
+			this.deleteReward = reward;
 			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
 			this.deleteProb = this.deleteReward / totalReward;
 			
-		} else if (currEdit.contains("Replace")) {
+		} else if (editType.contains("Replace")) {
 //			System.out.println("Updating replace fitness");
 //			System.out.println(currFitness);
-			this.replaceReward = currFitness;
+			this.replaceReward = reward;
 			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
 			this.replaceProb = this.replaceReward / totalReward;
 		}
@@ -221,8 +257,8 @@ public class MutationOperatorsRL {
 			return;
 		}
 		
-		double reward = rep.getFitness(); 
 		String editType = genome.get(genome.size() - 1).toString();
+		double reward = getReward(rep, editType);
 		
 		double qualitySum = this.appendQuality + this.deleteQuality + this.replaceQuality;
 
@@ -265,9 +301,9 @@ public class MutationOperatorsRL {
 			return;
 		}
 		
-		double reward = rep.getFitness(); 	
 		String editType = genome.get(genome.size() - 1).toString();
-		
+		double reward = getReward(rep, editType);
+
 		if (editType.contains("Append")) {
 //			System.out.println("Updating append fitness");
 //			System.out.println(reward);
@@ -310,30 +346,24 @@ public class MutationOperatorsRL {
 			return;
 		}
 		
-		double reward = rep.getFitness();	
 		String editType = genome.get(genome.size() - 1).toString();
-		
+		double reward = getReward(rep, editType);
+
 		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
 		
 		if (editType.contains("Append")) {
 			System.out.println("Updating append fitness");
 			System.out.println(reward);
-			this.appendChosenCount += 1;
-			this.appendTotalReward += reward;
 			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalReward);
 			
 		} else if (editType.contains("Delete")) {
 			System.out.println("Updating delete fitness");
 			System.out.println(reward);
-			this.deleteChosenCount += 1;
-			this.deleteTotalReward += reward;
 			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalReward);
 
 		} else if (editType.contains("Replace")) {
 			System.out.println("Updating replace fitness");
 			System.out.println(reward);
-			this.replaceChosenCount += 1;
-			this.replaceTotalReward += reward;
 			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalReward);
 
 		} else {

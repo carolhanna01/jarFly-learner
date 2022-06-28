@@ -89,6 +89,12 @@ public abstract class Search<G extends EditOperation> {
 			.withHelp( "model chosen to pick the fix atom from the pool of possible fix atoms with respect to the buggy atom" )
 			.inGroup( "Search Parameters" )
 			.build();
+	protected static String rewardType = ConfigurationBuilder.of( STRING )
+			.withVarName( "rewardType" )
+			.withDefault( "raw" )
+			.withHelp( "The type of reward that the mutation operators will be assigned: raw, average, or extreme")
+			.inGroup( "Search Parameters" )
+			.build();
 	protected static String modelPath = ConfigurationBuilder.of( STRING )
 			.withVarName( "modelPath" )
 			.withDefault( "OVERALLModel.txt" )
