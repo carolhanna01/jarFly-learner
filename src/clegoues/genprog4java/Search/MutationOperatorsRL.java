@@ -40,7 +40,7 @@ public class MutationOperatorsRL {
 	
 	/***************************************************************************/
 	
-	/******  For Strategy 3: adaptive pursuit operator selection  ******/
+	/******  For Strategy 4: multi-armed bandit operator selection  ******/
 	double appendChosenCount;
 	double deleteChosenCount;
 	double replaceChosenCount;
@@ -214,14 +214,7 @@ public class MutationOperatorsRL {
 
 	/***************************   Strategy 1   ********************************/
 	
-	private void rawRewardProbability(Representation rep) {
-		ArrayList<JavaEditOperation> genome =  rep.getGenome();
-		if (genome.size() == 0) { //TODO: fishy- Make it an assert again + figure out why it's failing OffByOne
-			return;
-		}
-
-		String editType = genome.get(genome.size() - 1).toString();
-		double reward = getReward(rep, editType);
+	private void rawRewardProbability(Representation rep, String editType, double reward) {
 		
 		if (editType.contains("Append")) {
 //			System.out.println("Updating append fitness");
@@ -250,15 +243,7 @@ public class MutationOperatorsRL {
 	
 	/***************************   Strategy 2   ********************************/
 	
-	private void probabilityMatching(Representation rep) {
-		
-		ArrayList<JavaEditOperation> genome =  rep.getGenome();
-		if (genome.size() == 0) {
-			return;
-		}
-		
-		String editType = genome.get(genome.size() - 1).toString();
-		double reward = getReward(rep, editType);
+	private void probabilityMatching(Representation rep, String editType, double reward) {
 		
 		double qualitySum = this.appendQuality + this.deleteQuality + this.replaceQuality;
 
@@ -294,15 +279,7 @@ public class MutationOperatorsRL {
 	
 	/***************************   Strategy 3   ********************************/
 
-	private void adaptivePursuit(Representation rep) {
-				
-		ArrayList<JavaEditOperation> genome =  rep.getGenome();
-		if (genome.size() == 0) {
-			return;
-		}
-		
-		String editType = genome.get(genome.size() - 1).toString();
-		double reward = getReward(rep, editType);
+	private void adaptivePursuit(Representation rep, String editType, double reward) {
 
 		if (editType.contains("Append")) {
 //			System.out.println("Updating append fitness");
@@ -340,14 +317,7 @@ public class MutationOperatorsRL {
 	
 	/***************************   Strategy 4   ********************************/
 
-	private void multiArmedBandit(Representation rep) {
-		ArrayList<JavaEditOperation> genome =  rep.getGenome();
-		if (genome.size() == 0) {
-			return;
-		}
-		
-		String editType = genome.get(genome.size() - 1).toString();
-		double reward = getReward(rep, editType);
+	private void multiArmedBandit(Representation rep, String editType, double reward) {
 
 		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
 		
@@ -380,19 +350,26 @@ public class MutationOperatorsRL {
 		return;	
 	}
 	
-	
 	// Activates the specified algorithm
 	
 	public void updateOperatorProbabilities(Representation rep) {
 		
+		ArrayList<JavaEditOperation> genome =  rep.getGenome();
+		if (genome.size() == 0) {
+			return;
+		}
+		
+		String editType = genome.get(genome.size() - 1).toString();
+		double reward = getReward(rep, editType);
+		
 		if (Search.model.endsWith("rawReward")) {
-			rawRewardProbability(rep);
+			rawRewardProbability(rep, editType, reward);
 		} else if (Search.model.endsWith("PM")) {
-			probabilityMatching(rep);
+			probabilityMatching(rep, editType, reward);
 		} else if (Search.model.endsWith("AP")) {
-			adaptivePursuit(rep);
+			adaptivePursuit(rep, editType, reward);
 		} else if (Search.model.endsWith("MAB")) {
-			multiArmedBandit(rep); // For both MAB and DMAB. Differentiation in conditional inside the function
+			multiArmedBandit(rep, editType, reward); // For both MAB and DMAB. Differentiation in conditional inside the function
 		} 
 	}
 	
