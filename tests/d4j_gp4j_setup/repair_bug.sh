@@ -24,6 +24,7 @@
 # 12th param is the path to file containing sampled negative tests"
 # 13th param is set to \"true\" if positive tests are to be specified using sampled tests else set this to \"false\""
 # 14th param is the path to file containing sampled positive tests"
+# 15th param is the experiment name
 
 #Example of usage:
 #./repair_bug.sh Math 2 allHuman 100 ExamplesCheckedOut 1 5 false /usr/lib/jvm/java-1.7.0-openjdk-amd64 /usr/lib/jvm/java-1.8.0-openjdk-amd64 false \"\" false \"\"
@@ -62,6 +63,7 @@ SAMPLENEGTESTS="${11}"
 NEGTESTPATH="${12}"
 SAMPLEPOSTESTS="${13}"
 POSTESTPATH="${14}"
+EXPERIMENT="${15}"
 
 if [ "$#" -eq 14 ]; then
   DIROFJAVA7="$9"
@@ -111,18 +113,18 @@ if [ -d "$GP4J_HOME" ]; then
 
 	#Running until fault loc only
 	if [ $JUSTTESTINGFAULTLOC == "true" ]; then
-	  echo "justTestingFaultLoc = true" >> $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/defects4j.config
+	  echo "justTestingFaultLoc = true" >> $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	fi
 
 	#Changing the seed
-	CHANGESEEDCOMMAND="sed -i '1s/.*/seed = $seed/' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/defects4j.config
+	CHANGESEEDCOMMAND="sed -i '1s/.*/seed = $seed/' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	eval $CHANGESEEDCOMMAND
 
 	if [ $seed != $STARTSEED ]; then
-	  REMOVESANITYCOMMAND="sed -i 's/sanity = yes/sanity = no/' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/defects4j.config
+	  REMOVESANITYCOMMAND="sed -i 's/sanity = yes/sanity = no/' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	  eval $REMOVESANITYCOMMAND
 
-	  REMOVEREGENPATHS="sed -i '/regenPaths/d' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/defects4j.config
+	  REMOVEREGENPATHS="sed -i '/regenPaths/d' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	  eval $REMOVEREGENPATHS
 	fi
     
@@ -132,7 +134,7 @@ if [ -d "$GP4J_HOME" ]; then
 	#sudo update-java-alternatives -s $DIROFJAVA8
 
 	JAVALOCATION=$(which java)
-	timeout -sHUP 4h $JAVALOCATION -ea -Dlog4j.configurationFile=file:"$GP4J_HOME"/src/log4j.properties -Dfile.encoding=UTF-8 -classpath "$GP4J_HOME"/target/uber-GenProg4Java-0.0.1-SNAPSHOT.jar clegoues.genprog4java.main.Main $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/defects4j.config | tee $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/log"$PROJECT""$BUGNUMBER"Seed$seed.txt &
+	timeout -sHUP 4h $JAVALOCATION -ea -Dlog4j.configurationFile=file:"$GP4J_HOME"/src/log4j.properties -Dfile.encoding=UTF-8 -classpath "$GP4J_HOME"/target/uber-GenProg4Java-0.0.1-SNAPSHOT.jar clegoues.genprog4java.main.Main $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config | tee $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/log"$PROJECT""$BUGNUMBER"Seed$seed.txt 
 
 
 	#Save the variants in a tar file

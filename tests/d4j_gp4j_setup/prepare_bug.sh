@@ -116,9 +116,9 @@ chmod 777 $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 
 cd $BUGWD
 
-#Create config file 
-FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/defects4j.config
-/bin/cat <<EOM >$FILE
+#Create config files 
+Base_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Base_defects4j.config
+/bin/cat <<EOM >$Base_FILE
 seed = 0
 sanity = yes
 popsize = 40
@@ -150,6 +150,391 @@ negativePathWeight=1.0
 positivePathWeight=0.1
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+RawReward_Direct_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/RawReward_Direct_defects4j.config
+/bin/cat <<EOM >$RawReward_Direct_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_rawReward
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+RawReward_Average_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/RawReward_Average_defects4j.config
+/bin/cat <<EOM >$RawReward_Average_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_rawReward
+rewardType = average
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+PM_Direct_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/PM_Direct_defects4j.config
+/bin/cat <<EOM >$PM_Direct_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_PM
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+PM_Average_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/PM_Average_defects4j.config
+/bin/cat <<EOM >$PM_Average_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_PM
+rewardType = average
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+AP_Direct_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/AP_Direct_defects4j.config
+/bin/cat <<EOM >$AP_Direct_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_AP
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+AP_Average_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/AP_Average_defects4j.config
+/bin/cat <<EOM >$AP_Average_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_AP
+rewardType = average
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+MAB_Direct_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/MAB_Direct_defects4j.config
+/bin/cat <<EOM >$MAB_Direct_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_MAB
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+MAB_Average_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/MAB_Average_defects4j.config
+/bin/cat <<EOM >$MAB_Average_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_MAB
+rewardType = average
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+DMAB_Direct_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/DMAB_Direct_defects4j.config
+/bin/cat <<EOM >$DMAB_Direct_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_DMAB
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+DMAB_Average_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/DMAB_Average_defects4j.config
+/bin/cat <<EOM >$DMAB_Average_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=1.0  
+# edits for PAR, GenProg, TrpAutoRepair
+#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=1.0
+positivePathWeight=0.1
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_DMAB
+rewardType = average
 # used only for TrpAutoRepair. value=400
 maxVariants=400
 EOM
@@ -215,7 +600,17 @@ cd $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
 if [[ $TESTSUITESAMPLE -ne 100 ]]
 then
     PERCENTAGETOREMOVE=$(echo "$TESTSUITESAMPLE * 0.01" | bc -l )
-    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Base_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/RawReward_Direct_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/RawReward_Average_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/PM_Direct_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/PM_Average_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/AP_Direct_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/AP_Average_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/MAB_Direct_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/MAB_Average_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/DMAB_Direct_defects4j.config
+    echo "sample = $PERCENTAGETOREMOVE" >> $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/DMAB_Average_defects4j.config
 fi
 
 # get the class names to be repaired
