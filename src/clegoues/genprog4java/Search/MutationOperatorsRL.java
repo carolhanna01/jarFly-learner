@@ -217,27 +217,29 @@ public class MutationOperatorsRL {
 	private void rawRewardProbability(Representation rep, String editType, double reward) {
 		
 		if (editType.contains("Append")) {
-//			System.out.println("Updating append fitness");
-//			System.out.println(currFitness);
+			System.out.println("Updating append fitness");
+			System.out.println(reward);
 			this.appendReward = reward;
-			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
-			this.appendProb = this.appendReward / totalReward;
 			
 		} else if (editType.contains("Delete")) {
-//			System.out.println("Updating delete fitness");
-//			System.out.println(currFitness);
+			System.out.println("Updating delete fitness");
+			System.out.println(reward);
 			this.deleteReward = reward;
-			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
-			this.deleteProb = this.deleteReward / totalReward;
 			
 		} else if (editType.contains("Replace")) {
-//			System.out.println("Updating replace fitness");
-//			System.out.println(currFitness);
+			System.out.println("Updating replace fitness");
+			System.out.println(reward);
 			this.replaceReward = reward;
-			double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
-			this.replaceProb = this.replaceReward / totalReward;
 		}
 		
+		double totalReward = this.appendReward + this.deleteReward + this.replaceReward;
+		if (totalReward == 0) {
+			return;
+		}
+		this.appendProb = this.appendReward / totalReward;
+		this.deleteProb = this.deleteReward / totalReward;
+		this.replaceProb = this.replaceReward / totalReward;
+
 		return;
 	}
 	
