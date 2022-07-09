@@ -8,7 +8,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument('javaVM')
-    args = parser.parse_args()
+    parser.add_argument('experiment')
 
     args = parser.parse_args()
 
@@ -18,4 +18,4 @@ if __name__ == '__main__':
         bug = line.split(" ")[1].strip()
         print(f"./prepare_bug.sh {project} {bug} humanMade 1 ExamplesCheckedOut {args.javaVM} {args.javaVM}  \"false\" ./ \"false\" ./")
         os.system(f"./prepare_bug.sh {project} {bug} humanMade 1 ExamplesCheckedOut {args.javaVM} {args.javaVM}  \"false\" ./ \"false\" ./")
-        os.system(f"./repair_bug.sh {project} {bug} allHuman 1 ExamplesCheckedOut 1 20 false {args.javaVM} {args.javaVM}  false \"\" false \"\"")
+        os.system(f"./repair_bug.sh {project} {bug} allHuman 1 ExamplesCheckedOut 1 20 false {args.javaVM} {args.javaVM}  false \"\" false \"\" {args.experiment}")
