@@ -80,7 +80,7 @@ LOWERCASEPACKAGE=`echo $PROJECT | tr '[:upper:]' '[:lower:]'`
 export PATH=$PATH:$D4J_HOME/framework/bin
 
 # directory with the checked out buggy project
-BUGWD=$D4J_HOME/$BUGSFOLDER"/"$LOWERCASEPACKAGE"$BUGNUMBER"Buggy
+BUGWD=$BUGSFOLDER"/"$LOWERCASEPACKAGE"$BUGNUMBER"Buggy
 export JAVA_HOME=$DIROFJAVA8
 export JRE_HOME=$DIROFJAVA8/jre
 export PATH=$DIROFJAVA8/bin/:$PATH
@@ -114,19 +114,19 @@ if [ -d "$GP4J_HOME" ]; then
 
 	#Running until fault loc only
 	if [ $JUSTTESTINGFAULTLOC == "true" ]; then
-	  echo "justTestingFaultLoc = true" >> $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
+	  echo "justTestingFaultLoc = true" >> $BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	fi
 
 	#Changing the seed
-	CHANGESEEDCOMMAND="sed -i '1s/.*/seed = $seed/' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
+	CHANGESEEDCOMMAND="sed -i '1s/.*/seed = $seed/' "$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	eval $CHANGESEEDCOMMAND
 
 	
-	REMOVESANITYCOMMAND="sed -i 's/sanity = yes/sanity = no/' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
+	REMOVESANITYCOMMAND="sed -i 's/sanity = yes/sanity = no/' "$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	eval $REMOVESANITYCOMMAND
 	
 	if [ $seed != $STARTSEED ]; then
-	  REMOVEREGENPATHS="sed -i '/regenPaths/d' "$D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
+	  REMOVEREGENPATHS="sed -i '/regenPaths/d' "$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	  eval $REMOVEREGENPATHS
 	fi
     
@@ -138,7 +138,7 @@ if [ -d "$GP4J_HOME" ]; then
 	mkdir $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy
 	
 	JAVALOCATION=$(which java)
-	timeout -sHUP 4h $JAVALOCATION -ea -Dlog4j.configurationFile=file:"$GP4J_HOME"/src/log4j.properties -Dfile.encoding=UTF-8 -classpath "$GP4J_HOME"/target/uber-GenProg4Java-0.0.1-SNAPSHOT.jar clegoues.genprog4java.main.Main $D4J_HOME/$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config | tee $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/log"$PROJECT""$BUGNUMBER"Seed$seed.txt 
+	timeout -sHUP 4h $JAVALOCATION -ea -Dlog4j.configurationFile=file:"$GP4J_HOME"/src/log4j.properties -Dfile.encoding=UTF-8 -classpath "$GP4J_HOME"/target/uber-GenProg4Java-0.0.1-SNAPSHOT.jar clegoues.genprog4java.main.Main $BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config | tee $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/log"$PROJECT""$BUGNUMBER"Seed$seed.txt 
 
 
 	#Save the variants in a tar file
