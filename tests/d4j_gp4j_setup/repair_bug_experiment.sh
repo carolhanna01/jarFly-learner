@@ -106,7 +106,7 @@ if [ -d "$GP4J_HOME" ]; then
 
     if [ -d "$BUGWD/$WD" ]; then
       #Go to the working directory
-      cd $BUGWD/$WD
+      #cd $BUGWD/$WD
 
       for (( seed=$STARTSEED; seed<=$UNTILSEED; seed++ ))
       do	
@@ -135,18 +135,18 @@ if [ -d "$GP4J_HOME" ]; then
   	export PATH=$DIROFJAVA8/bin/:$PATH
 	#sudo update-java-alternatives -s $DIROFJAVA8
 
-	mkdir $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy
+	mkdir $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy
 	
 	JAVALOCATION=$(which java)
-	timeout -sHUP 4h $JAVALOCATION -ea -Dlog4j.configurationFile=file:"$GP4J_HOME"/src/log4j.properties -Dfile.encoding=UTF-8 -classpath "$GP4J_HOME"/target/uber-GenProg4Java-0.0.1-SNAPSHOT.jar clegoues.genprog4java.main.Main $BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config | tee $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/log"$PROJECT""$BUGNUMBER"Seed$seed.txt 
+	timeout -sHUP 4h $JAVALOCATION -ea -Dlog4j.configurationFile=file:"$GP4J_HOME"/src/log4j.properties -Dfile.encoding=UTF-8 -classpath "$GP4J_HOME"/target/uber-GenProg4Java-0.0.1-SNAPSHOT.jar clegoues.genprog4java.main.Main $BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config | tee $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/log"$PROJECT""$BUGNUMBER"Seed$seed.txt 
 
 
 	#Save the variants in a tar file
-	tar -cvf $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/variants"$PROJECT""$BUGNUMBER"Seed$seed.tar $D4J_HOME/$DESTINATON/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
-	mv $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/original/ $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/
-	rm -r $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
-	mkdir $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
-	mv $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/original/ $D4J_HOME/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
+	tar -cvf $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/variants"$PROJECT""$BUGNUMBER"Seed$seed.tar $D4J_HOME_LOCAL/$DESTINATON/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
+	mv $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/original/ $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/
+	rm -r $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
+	mkdir $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
+	mv $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/original/ $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
 	
       done
     fi
