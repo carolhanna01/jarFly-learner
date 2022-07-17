@@ -137,7 +137,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -146,8 +146,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 # used only for TrpAutoRepair. value=400
@@ -174,7 +174,7 @@ compileCommand =$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -183,8 +183,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_rawReward
@@ -212,7 +212,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -221,8 +221,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_rawReward
@@ -251,7 +251,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -260,8 +260,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_PM
@@ -289,7 +289,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -298,8 +298,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_PM
@@ -328,7 +328,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -337,8 +337,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_AP
@@ -366,7 +366,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -375,8 +375,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_AP
@@ -405,7 +405,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -414,8 +414,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_MAB
@@ -443,7 +443,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -452,8 +452,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_MAB
@@ -482,7 +482,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -491,8 +491,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_DMAB
@@ -520,7 +520,7 @@ compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
 targetClassName = $BUGWD/bugfiles.txt
 testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
-sample=1.0  
+sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
 #edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
@@ -529,8 +529,8 @@ edits=append;replace;delete
 #model=probabilistic
 #modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
 # use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
-negativePathWeight=1.0
-positivePathWeight=0.1
+negativePathWeight=0.65
+positivePathWeight=0.35
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
 model= RL_DMAB

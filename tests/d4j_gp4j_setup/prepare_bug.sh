@@ -120,7 +120,7 @@ cd $BUGWD
 Base_FILE=$D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Base_defects4j.config
 /bin/cat <<EOM >$Base_FILE
 seed = 0
-sanity = yes
+sanity = no
 popsize = 40
 javaVM = $DIROFJAVA7/jre/bin/java
 workingDir = $D4J_HOME/$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/

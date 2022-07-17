@@ -102,11 +102,11 @@ if [ -d "$GP4J_HOME" ]; then
   #sudo update-java-alternatives -s $DIROFJAVA7
 
     #cd ~/JavaRepair-results/defects4j-scripts/
-    #$D4J_HOME/d4j_gp4j_setup/prepare_bug.sh $PROJECT $BUGNUMBER $OPTION $TESTSUITESAMPLE $BUGSFOLDER $DIROFJAVA7 $DIROFJAVA8 $SAMPLENEGTESTS $NEGTESTPATH $SAMPLEPOSTESTS $POSTESTPATH
+    $GP4J_HOME/tests/d4j_gp4j_setup/prepare_bug_experiment.sh $PROJECT $BUGNUMBER $OPTION $TESTSUITESAMPLE $BUGSFOLDER $DIROFJAVA7 $DIROFJAVA8 $SAMPLENEGTESTS $NEGTESTPATH $SAMPLEPOSTESTS $POSTESTPATH
 
     if [ -d "$BUGWD/$WD" ]; then
       #Go to the working directory
-      #cd $BUGWD/$WD
+      cd $BUGWD/$WD
 
       for (( seed=$STARTSEED; seed<=$UNTILSEED; seed++ ))
       do	
@@ -125,10 +125,10 @@ if [ -d "$GP4J_HOME" ]; then
 	REMOVESANITYCOMMAND="sed -i 's/sanity = yes/sanity = no/' "$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	eval $REMOVESANITYCOMMAND
 	
-	if [ $seed != $STARTSEED ]; then
+	#if [ $seed != $STARTSEED ]; then
 	  REMOVEREGENPATHS="sed -i '/regenPaths/d' "$BUGSFOLDER/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/"$EXPERIMENT".config
 	  eval $REMOVEREGENPATHS
-	fi
+	#fi
     
 	export JAVA_HOME=$DIROFJAVA8
 	export JRE_HOME=$DIROFJAVA8/jre
@@ -142,7 +142,7 @@ if [ -d "$GP4J_HOME" ]; then
 
 
 	#Save the variants in a tar file
-	tar -cvf $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/variants"$PROJECT""$BUGNUMBER"Seed$seed.tar $D4J_HOME_LOCAL/$DESTINATON/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
+	tar -cvf $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/variants"$PROJECT""$BUGNUMBER"Seed$seed.tar $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
 	mv $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/original/ $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/
 	rm -r $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/
 	mkdir $D4J_HOME_LOCAL/$DESTINATION/"$LOWERCASEPACKAGE""$BUGNUMBER"Buggy/tmp/

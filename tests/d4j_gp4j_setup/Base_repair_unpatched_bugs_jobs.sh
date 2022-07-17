@@ -8,7 +8,7 @@
 
 # -l tscratch=80G
 #$ -t 1-20
-
+#$ -N un_base
 
 hostname
 date
@@ -34,16 +34,16 @@ cd $GP4J_HOME
 while read p; do
 
 	
-       /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/prepare_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) humanMade 100 $D4J_HOME/patched /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  \"false\" ./ \"false\" ./
+       /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/prepare_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) humanMade 100 $D4J_HOME/unpatched /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  \"false\" ./ \"false\" ./
 	
 	
 	echo "Starting repair"
 	
-	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" Base_defects4j PatchedBugs_Base
+	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/unpatched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" Base_defects4j UnPatchedBugs_Base
 
-	rm -rf $D4J_HOME/patched/*
+	rm -rf $D4J_HOME/unpatched/*
        	
-	done < /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/d4j_v1.1.0_patched_bugs
+	done < /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/d4j_v1.1.0_unpatched_bugs
 
 echo "Finishing repair"
 rm -rf /scratch0/channa/$JOB_ID.$SGE_TASK_ID
