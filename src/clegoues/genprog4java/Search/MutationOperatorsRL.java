@@ -70,7 +70,7 @@ public class MutationOperatorsRL {
 		
 		this.operators_num = Search.availableMutations.size();
 		this.Pmin = 1 / (2 * this.operators_num); // fine tune (1/2K was recommended)
-		this.alpha = 0.8; // Adaption rate: fine tune (this value is from AP paper)
+		this.alpha = 0.8;// Adaption rate: fine tune (this value is from AP paper)
 		
 		this.appendProb = 1 / this.operators_num;
 		this.deleteProb = 1 / this.operators_num;
@@ -92,9 +92,9 @@ public class MutationOperatorsRL {
 		this.deleteTotalReward = 0;
 		this.replaceTotalReward = 0;
 		
-		this.exploreExploitTradeoff = 0.3; // Constant balancing exploration-exploitation tradeoff: fine-tune
+		this.exploreExploitTradeoff = 10; // Constant balancing exploration-exploitation tradeoff: fine-tune
 		
-		this.ph_gamma = 250; // For sensitivity tradeoff: fine-tune 
+		this.ph_gamma = 25; // For sensitivity tradeoff: fine-tune 
 		this.ph_delta = 0.15; // For test robustness: fine-tune
 		this.current_m = 0;
 		this.max_m = 0;
