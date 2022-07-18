@@ -1,11 +1,10 @@
 
-#$ -l tmem=30G
-#$ -l h_vmem=30G
+#$ -l tmem=15G
+#$ -l h_vmem=15G
 #$ -l h_rt=72:0:0
 
 #$ -S /bin/bash
 #$ -j y
-
 
 #$ -t 1-20
 
