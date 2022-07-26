@@ -48,15 +48,14 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			Representation<G> newItem = original.copy();
 			this.mutate(newItem);
 			initialPopulation.add(newItem);
-			
-			if(Search.model.startsWith("RL")) {
-				fitnessEngine.testFitness(0, newItem);
-				muRL.updateOperatorProbabilities(newItem);		
-			}
 		}
 
 		for (Representation<G> item : initialPopulation) {
-			if (fitnessEngine.testFitness(0, item)) {
+			boolean found = fitnessEngine.testFitness(0, item);
+			if(Search.model.startsWith("RL")) {
+				muRL.updateOperatorQualities(item);		
+			}
+			if (found) {
 				this.noteSuccess(item, original, 0);
 				if(!continueSearch) {
 					throw new RepairFoundException();
@@ -110,20 +109,24 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			for (Representation<G> item : incomingPopulation) {
 				Representation<G> newItem = original.copy();
 				this.mutate(item);
-				if(Search.model.startsWith("RL")) {
-					fitnessEngine.testFitness(gen, item);
-					muRL.updateOperatorProbabilities(item);		
-				}
 			}
 
 			// step 4: fitness
 			for (Representation<G> item : incomingPopulation) {
-				if (fitnessEngine.testFitness(gen, item)) {
+				boolean found = fitnessEngine.testFitness(gen, item);
+				if(Search.model.startsWith("RL")) {
+					muRL.updateOperatorQualities(item);		
+				}
+				if (found) {
 					this.noteSuccess(item, original, gen);
 					if(!continueSearch) 
 						return;
 				}
 			}
+			if (Search.model.endsWith("AP")) {
+				muRL.updateAdaptivePursuitProbabilities();
+			}
+			
 			gen++;
 		}
 	}

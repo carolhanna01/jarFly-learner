@@ -45,9 +45,9 @@ public class MutationOperatorsRL {
 	double deleteChosenCount;
 	double replaceChosenCount;
 
-	double appendTotalReward;
-	double deleteTotalReward;
-	double replaceTotalReward;
+	double appendTotalTDReward;
+	double deleteTotalTDReward;
+	double replaceTotalTDReward;
 	
 	double exploreExploitTradeoff; 
 	
@@ -57,6 +57,13 @@ public class MutationOperatorsRL {
 	double ph_delta;
 	double current_m;
 	double max_m;
+	
+	/******  Average Reward Credit Assignment  ******/
+
+	double appendTotalReward;
+	double deleteTotalReward;
+	double replaceTotalReward;
+	
 	
 	/***************************************************************************/
 
@@ -88,9 +95,9 @@ public class MutationOperatorsRL {
 		this.deleteChosenCount = 0;
 		this.replaceChosenCount = 0;
 
-		this.appendTotalReward = 0;
-		this.deleteTotalReward = 0;
-		this.replaceTotalReward = 0;
+		this.appendTotalTDReward = 0;
+		this.deleteTotalTDReward = 0;
+		this.replaceTotalTDReward = 0;
 		
 		this.exploreExploitTradeoff = 10; // Constant balancing exploration-exploitation tradeoff: fine-tune
 		
@@ -98,6 +105,10 @@ public class MutationOperatorsRL {
 		this.ph_delta = 0.15; // For test robustness: fine-tune
 		this.current_m = 0;
 		this.max_m = 0;
+		
+		this.appendTotalReward = 0;
+		this.deleteTotalReward = 0;
+		this.replaceTotalReward = 0;
 	}
 	
 	
@@ -134,7 +145,7 @@ public class MutationOperatorsRL {
 		
 //		System.out.println("Activating Page Hinkley test");
 		
-		double totalReward = this.appendTotalReward + this.deleteTotalReward + this.replaceTotalReward;
+		double totalReward = this.appendTotalTDReward + this.deleteTotalTDReward + this.replaceTotalTDReward;
 		double totalChosenCount = this.appendChosenCount + this.deleteChosenCount+ this.replaceChosenCount;
 		double overallAverageReward = totalReward / totalChosenCount;
 		this.current_m += reward - overallAverageReward + this.ph_delta;
@@ -164,6 +175,10 @@ public class MutationOperatorsRL {
 		this.appendTotalReward = 0;
 		this.deleteTotalReward = 0;
 		this.replaceTotalReward = 0;
+		
+		this.appendTotalTDReward = 0;
+		this.deleteTotalTDReward = 0;
+		this.replaceTotalTDReward = 0;
 		
 		this.appendProb = 1 / this.operators_num;
 		this.deleteProb = 1 / this.operators_num;
@@ -306,6 +321,11 @@ public class MutationOperatorsRL {
 			System.out.println("Unexpected Mutation Operator");
 		}
 		
+
+		return;
+	}
+	
+	public void updateAdaptivePursuitProbabilities() {
 		double maxQuality = Math.max(this.appendQuality, Math.max(this.deleteQuality, this.replaceQuality));
 
 		this.appendProb = pursueMaximalQuality(maxQuality, this.appendQuality, this.appendProb);
@@ -314,7 +334,6 @@ public class MutationOperatorsRL {
 		
 		this.maxFound = false;
 		
-		return;
 	}
 	
 	/***************************   Strategy 4   ********************************/
@@ -326,17 +345,27 @@ public class MutationOperatorsRL {
 		if (editType.contains("Append")) {
 			System.out.println("Updating append fitness");
 			System.out.println(reward);
-			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalReward);
+			
+			double quality = this.appendQuality;
+			this.appendQuality = quality + alpha * (reward - quality);
+			this.appendTotalTDReward += this.appendQuality;
+			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalTDReward);
 			
 		} else if (editType.contains("Delete")) {
 			System.out.println("Updating delete fitness");
 			System.out.println(reward);
-			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalReward);
+			double quality = this.deleteQuality;
+			this.deleteQuality = quality + alpha * (reward - quality);
+			this.deleteTotalTDReward += this.deleteQuality;
+			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalTDReward);
 
 		} else if (editType.contains("Replace")) {
 			System.out.println("Updating replace fitness");
 			System.out.println(reward);
-			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalReward);
+			double quality = this.replaceQuality;
+			this.replaceQuality = quality + alpha * (reward - quality);
+			this.replaceTotalTDReward += this.replaceQuality;
+			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalTDReward);
 
 		} else {
 			//TODO: make this throw an exception instead
@@ -354,7 +383,7 @@ public class MutationOperatorsRL {
 	
 	// Activates the specified algorithm
 	
-	public void updateOperatorProbabilities(Representation rep) {
+	public void updateOperatorQualities(Representation rep) {
 		
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
 		if (genome.size() == 0) {
