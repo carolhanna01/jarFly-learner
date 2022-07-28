@@ -86,6 +86,21 @@ public class GlobalUtils {
 		return chosen;
 	}
 	
+	public static Pair<?,Double> chooseMaxEpsilonWeighted(List<Pair<?,Double>> atoms) {
+		assert(atoms.size() > 0);
+		Pair<?,Double> chosen;
+		double epsilon = 0.2;
+		double randomVal = Configuration.randomizer.nextDouble();
+		
+		if (epsilon > randomVal) {
+			chosen = chooseOneWeighted(atoms);
+		} else {
+			chosen = chooseMaxWeighted(atoms);
+		}
+		
+		return chosen;
+	}
+	
 	public static Pair<?,Double> chooseOneWeighted(ArrayList<Pair<?,Double>> atoms, double weight) {
 		assert(atoms.size() > 0);
 		double totalWeight = 0.0;

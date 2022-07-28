@@ -123,9 +123,6 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 						return;
 				}
 			}
-			if (Search.model.endsWith("AP")) {
-				muRL.updateAdaptivePursuitProbabilities();
-			}
 			
 			gen++;
 		}

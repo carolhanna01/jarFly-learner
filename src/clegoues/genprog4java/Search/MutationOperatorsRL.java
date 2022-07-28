@@ -321,11 +321,6 @@ public class MutationOperatorsRL {
 			System.out.println("Unexpected Mutation Operator");
 		}
 		
-
-		return;
-	}
-	
-	public void updateAdaptivePursuitProbabilities() {
 		double maxQuality = Math.max(this.appendQuality, Math.max(this.deleteQuality, this.replaceQuality));
 
 		this.appendProb = pursueMaximalQuality(maxQuality, this.appendQuality, this.appendProb);
@@ -334,7 +329,9 @@ public class MutationOperatorsRL {
 		
 		this.maxFound = false;
 		
+		return;
 	}
+	
 	
 	/***************************   Strategy 4   ********************************/
 

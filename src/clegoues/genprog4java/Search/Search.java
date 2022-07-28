@@ -309,9 +309,15 @@ public abstract class Search<G extends EditOperation> {
 				}
 				//choose a mutation 
 				List availableMutationsAL = rescaleMutations(availableMutations);
-				Pair<Mutation, Double> chosenMutation = (Pair<Mutation, Double>) GlobalUtils.chooseOneWeighted(availableMutationsAL);
-				if(Search.model.endsWith("MAB")) {
+				Pair<Mutation, Double> chosenMutation;
+				if(Search.model.endsWith("Epsilon_MAB")) {
+					chosenMutation = (Pair<Mutation, Double>) GlobalUtils.chooseMaxEpsilonWeighted(availableMutationsAL);
+				}
+				else if(Search.model.endsWith("MAB")) {
 					chosenMutation = (Pair<Mutation, Double>) GlobalUtils.chooseMaxWeighted(availableMutationsAL);
+				}
+				else {
+					chosenMutation = (Pair<Mutation, Double>) GlobalUtils.chooseOneWeighted(availableMutationsAL);
 				}
 				Mutation mut = chosenMutation.getLeft();
 				List<WeightedHole> allowed = variant.editSources(location, mut);
