@@ -224,6 +224,16 @@ public class MutationOperatorsRL {
 		
 	}
 	
+	private double getQuality(double quality, double reward) {
+		if (Search.rewardType.startsWith("average")) {
+			return reward;
+		}
+		
+		// Default is temporal difference
+		return quality + alpha * (reward - quality);
+	}
+
+	
 	/***************************************************************************/
 
 
@@ -268,21 +278,21 @@ public class MutationOperatorsRL {
 //			System.out.println("Updating append fitness");
 //			System.out.println(reward);
 			double quality = this.appendQuality;
-			this.appendQuality = quality + alpha * (reward - quality);
+			this.appendQuality = getQuality(quality, reward);
 			this.appendProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ qualitySum);
 			
 		} else if (editType.contains("Delete")) {
 //			System.out.println("Updating delete fitness");
 //			System.out.println(reward);
 			double quality = this.deleteQuality;
-			this.deleteQuality = quality + alpha * (reward - quality);
+			this.deleteQuality = getQuality(quality, reward);
 			this.deleteProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ qualitySum);
 
 		} else if (editType.contains("Replace")) {
 //			System.out.println("Updating replace fitness");
 //			System.out.println(reward);
 			double quality = this.replaceQuality;
-			this.replaceQuality = quality + alpha * (reward - quality);
+			this.replaceQuality = getQuality(quality, reward);
 			this.replaceProb = this.Pmin + (1 - this.operators_num * this.Pmin) * (quality/ qualitySum);
 
 		} else {
@@ -302,19 +312,19 @@ public class MutationOperatorsRL {
 //			System.out.println("Updating append fitness");
 //			System.out.println(reward);
 			double quality = this.appendQuality;
-			this.appendQuality = quality + alpha * (reward - quality);
+			this.appendQuality = getQuality(quality, reward);
 			
 		} else if (editType.contains("Delete")) {
 //			System.out.println("Updating delete fitness");
 //			System.out.println(reward);
 			double quality = this.deleteQuality;
-			this.deleteQuality = quality + alpha * (reward - quality);
+			this.deleteQuality = getQuality(quality, reward);
 
 		} else if (editType.contains("Replace")) {
 //			System.out.println("Updating replace fitness");
 //			System.out.println(reward);
 			double quality = this.replaceQuality;
-			this.replaceQuality = quality + alpha * (reward - quality);
+			this.replaceQuality = getQuality(quality, reward);
 
 		} else {
 			//TODO: make this throw an exception instead
@@ -332,8 +342,33 @@ public class MutationOperatorsRL {
 		return;
 	}
 	
-	
 	/***************************   Strategy 4   ********************************/
+
+	private void epsilonGreedy(Representation rep, String editType, double reward) {
+	
+		if (editType.contains("Append")) {
+			double quality = this.appendQuality;
+			this.appendQuality = getQuality(quality, reward);
+			this.appendProb = this.appendQuality;
+			
+		} else if (editType.contains("Delete")) {
+			double quality = this.deleteQuality;
+			this.deleteQuality = getQuality(quality, reward);
+			this.deleteProb = this.deleteQuality;
+			
+		} else if (editType.contains("Replace")) {
+			double quality = this.replaceQuality;
+			this.replaceQuality = getQuality(quality, reward);
+			this.replaceProb = this.replaceQuality;
+			
+		} else {
+			//TODO: make this throw an exception instead
+			System.out.println("Unexpected Mutation Operator");
+		}
+		
+		return;	
+	}
+	/***************************   Strategy 5   ********************************/
 
 	private void multiArmedBandit(Representation rep, String editType, double reward) {
 
@@ -344,7 +379,7 @@ public class MutationOperatorsRL {
 			System.out.println(reward);
 			
 			double quality = this.appendQuality;
-			this.appendQuality = quality + alpha * (reward - quality);
+			this.appendQuality = getQuality(quality, reward);
 			this.appendTotalTDReward += this.appendQuality;
 			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalTDReward);
 			
@@ -352,7 +387,7 @@ public class MutationOperatorsRL {
 			System.out.println("Updating delete fitness");
 			System.out.println(reward);
 			double quality = this.deleteQuality;
-			this.deleteQuality = quality + alpha * (reward - quality);
+			this.deleteQuality = getQuality(quality, reward);
 			this.deleteTotalTDReward += this.deleteQuality;
 			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalTDReward);
 
@@ -360,7 +395,7 @@ public class MutationOperatorsRL {
 			System.out.println("Updating replace fitness");
 			System.out.println(reward);
 			double quality = this.replaceQuality;
-			this.replaceQuality = quality + alpha * (reward - quality);
+			this.replaceQuality = getQuality(quality, reward);
 			this.replaceTotalTDReward += this.replaceQuality;
 			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalTDReward);
 
@@ -396,12 +431,12 @@ public class MutationOperatorsRL {
 			probabilityMatching(rep, editType, reward);
 		} else if (Search.model.endsWith("AP")) {
 			adaptivePursuit(rep, editType, reward);
+		} else if (Search.model.endsWith("Epsilon_MAB")) {
+			epsilonGreedy(rep, editType, reward); // For both MAB and DMAB. Differentiation in conditional inside the function
 		} else if (Search.model.endsWith("MAB")) {
 			multiArmedBandit(rep, editType, reward); // For both MAB and DMAB. Differentiation in conditional inside the function
 		} 
 	}
-	
-	
 	
 	// Assigns the saved class probabilities to the  operators
 	
