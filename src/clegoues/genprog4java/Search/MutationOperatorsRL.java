@@ -12,35 +12,31 @@ import clegoues.genprog4java.mut.edits.java.JavaEditOperation;
 
 public class MutationOperatorsRL {
 	
-	// Probability values
+	// For TD Credit Assignment
+	Map<String, Double> qualities;
+	
+	//For Average Credit Assignment
+	Map<String, Double> totalRewards;
+	
 	Map<String, Double> probabilities;
+
+	/*********************** Operator Selection ********************************/
 
 	/*****  For Strategy 1: raw reward probability operator selection  *****/
 	Map<String, Double> rewards;
 
-	/***************************************************************************/
-
 	/******  For Strategy 2: probability matching operator selection  ******/
-	// Parameters
 	double Pmin;
 	double operators_num;
 	double alpha;
-	
-	// Quality values
-	Map<String, Double> qualities;
-
-	/***************************************************************************/
 	
 	/******  For Strategy 3: adaptive pursuit operator selection  ******/
 	double Pmax;
 	double beta;
 	boolean maxFound;
 	
-	/***************************************************************************/
-	
 	/******  For Strategy 4: multi-armed bandit operator selection  ******/
 	Map<String, Integer> chosenCount;
-	Map<String, Double> totalQualities;
 	double exploreExploitTradeoff; 
 	
 	
@@ -49,9 +45,6 @@ public class MutationOperatorsRL {
 	double ph_delta;
 	double current_m;
 	double max_m;
-	
-	/******  Average Reward Credit Assignment  ******/
-	Map<String, Double> totalRewards;
 	
 	/***************************************************************************/
 
@@ -86,11 +79,6 @@ public class MutationOperatorsRL {
 		this.chosenCount.put("Append", 0);
 		this.chosenCount.put("Delete", 0);
 		this.chosenCount.put("Replace", 0);
-
-		this.totalQualities = new HashMap<String, Double>();
-		this.totalQualities.put("Append", 0.0);
-		this.totalQualities.put("Delete", 0.0);
-		this.totalQualities.put("Replace", 0.0);
 		
 		this.exploreExploitTradeoff = 10; // Constant balancing exploration-exploitation tradeoff: fine-tune
 		
@@ -158,15 +146,15 @@ public class MutationOperatorsRL {
 		
 //		System.out.println("Activating Page Hinkley test");
 		
-		double allTotalQualities = 0;
-		for (String key: this.totalQualities.keySet()){
-			allTotalQualities += this.totalQualities.get(key);
+		double totalQualities = 0;
+		for (String key: this.qualities.keySet()){
+			totalQualities += this.qualities.get(key);
 		}
 		double chosenCountTotal = 0;
 		for (String key: this.chosenCount.keySet()){
 			chosenCountTotal += this.chosenCount.get(key);
 		}
-		double overallAverageQuality = allTotalQualities / chosenCountTotal;
+		double overallAverageQuality = totalQualities / chosenCountTotal;
 		this.current_m += reward - overallAverageQuality + this.ph_delta;
 		
 		if(this.current_m > this.max_m) {
@@ -195,10 +183,6 @@ public class MutationOperatorsRL {
 			this.probabilities.put(key, 1 / this.operators_num);
 		}
 		
-		for (String key: this.totalQualities.keySet()){
-			this.totalQualities.put(key, 0.0);
-		}
-		
 		for (String key: this.totalRewards.keySet()){
 			this.totalRewards.put(key, 0.0);
 		}
@@ -225,7 +209,7 @@ public class MutationOperatorsRL {
 		return fitness; 
 	}
 	
-	private double getQuality(double quality, double reward) {
+	private double updateQuality(double quality, double reward) {
 		if (Search.rewardType.startsWith("average")) {
 			return reward;
 		}
@@ -284,7 +268,7 @@ public class MutationOperatorsRL {
 		System.out.println(reward);
 		
 		double oldQuality = this.qualities.get(editType);
-		double newQuality = getQuality(oldQuality, reward);
+		double newQuality = updateQuality(oldQuality, reward);
 		double newProbability = this.Pmin + (1 - this.operators_num * this.Pmin) * (oldQuality/ totalQualities);
 		this.qualities.put(editType, newQuality);
 		this.probabilities.put(editType, newProbability);
@@ -301,7 +285,7 @@ public class MutationOperatorsRL {
 		System.out.println(reward);
 		
 		double oldQuality = this.qualities.get(editType);
-		double newQuality = getQuality(oldQuality, reward);
+		double newQuality = updateQuality(oldQuality, reward);
 		this.qualities.put(editType, newQuality);
 	
 		for (String key: this.probabilities.keySet()){
@@ -323,7 +307,7 @@ public class MutationOperatorsRL {
 		System.out.println(reward);
 		
 		double oldQuality = this.qualities.get(editType);
-		double newQuality = getQuality(oldQuality, reward);
+		double newQuality = updateQuality(oldQuality, reward);
 		this.qualities.put(editType, newQuality);
 		this.probabilities.put(editType, newQuality);
 		
@@ -343,12 +327,8 @@ public class MutationOperatorsRL {
 		
 		// Update Quality
 		double oldQuality = this.qualities.get(editType);
-		double newQuality = getQuality(oldQuality, reward);
+		double newQuality = updateQuality(oldQuality, reward);
 		this.qualities.put(editType, newQuality);
-		
-		// Update Total Qualities
-		double currTotalQuality = this.totalQualities.get(editType);
-		this.totalQualities.put(editType, currTotalQuality + newQuality);
 		
 		// Update Probability
 		double newProb = upperConfidenceBound(editType);
