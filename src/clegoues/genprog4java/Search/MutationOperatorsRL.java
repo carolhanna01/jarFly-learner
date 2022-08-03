@@ -133,9 +133,13 @@ public class MutationOperatorsRL {
 	
 	// Helper function for the MAB strategy: implements UCB algorithm
 	
-	private double upperConfidenceBound(double chosenCount, double totalReward) {
+	private double upperConfidenceBound(double chosenCount, double totalReward, double quality) {
 		double chosenCountTotal = this.appendChosenCount + this.deleteChosenCount + this.replaceChosenCount;
-		return (totalReward / chosenCount) + this.exploreExploitTradeoff * Math.sqrt((Math.log(chosenCountTotal)/ chosenCount));
+		double probability = quality;
+		if (Search.rewardType.startsWith("average")) {
+			probability = totalReward / chosenCount;
+		}
+		return  probability + this.exploreExploitTradeoff * Math.sqrt((Math.log(chosenCountTotal)/ chosenCount));
 	}
 	
 	
@@ -381,7 +385,7 @@ public class MutationOperatorsRL {
 			double quality = this.appendQuality;
 			this.appendQuality = getQuality(quality, reward);
 			this.appendTotalTDReward += this.appendQuality;
-			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalTDReward);
+			this.appendProb = upperConfidenceBound(this.appendChosenCount, this.appendTotalTDReward, this.appendQuality);
 			
 		} else if (editType.contains("Delete")) {
 			System.out.println("Updating delete fitness");
@@ -389,7 +393,7 @@ public class MutationOperatorsRL {
 			double quality = this.deleteQuality;
 			this.deleteQuality = getQuality(quality, reward);
 			this.deleteTotalTDReward += this.deleteQuality;
-			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalTDReward);
+			this.deleteProb = upperConfidenceBound(this.deleteChosenCount, this.deleteTotalTDReward, this.deleteQuality);
 
 		} else if (editType.contains("Replace")) {
 			System.out.println("Updating replace fitness");
@@ -397,7 +401,7 @@ public class MutationOperatorsRL {
 			double quality = this.replaceQuality;
 			this.replaceQuality = getQuality(quality, reward);
 			this.replaceTotalTDReward += this.replaceQuality;
-			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalTDReward);
+			this.replaceProb = upperConfidenceBound(this.replaceChosenCount, this.replaceTotalTDReward, this.replaceQuality);
 
 		} else {
 			//TODO: make this throw an exception instead
