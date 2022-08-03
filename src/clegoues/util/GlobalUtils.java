@@ -79,7 +79,9 @@ public class GlobalUtils {
 		Pair<?,Double> chosen = atoms.get(0);
 		double max = Integer.MIN_VALUE;
 		for(Pair<?,Double> atom : atoms) {
-			if(atom.getRight() > max) {
+			double curr = atom.getRight();
+			if(curr > max) {
+				max = curr;
 				chosen = atom;
 			}
 		}
