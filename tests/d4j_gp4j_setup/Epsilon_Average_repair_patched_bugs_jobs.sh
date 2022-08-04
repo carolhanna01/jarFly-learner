@@ -5,7 +5,8 @@
 
 #$ -S /bin/bash
 #$ -j y
-#$ -N MAB_0.2
+#$ -N epsi_NOTD
+
 
 #$ -t 1-20
 
@@ -39,7 +40,7 @@ while read p; do
 	
 	echo "Starting repair"
 	
-	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" MAB_Direct_defects4j PatchedBugs_MAB_0.2
+	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" Epsilon_MAB_Average_defects4j PatchedBugs_Epsilon_NOTD
 
 	rm -rf $D4J_HOME/patched/*
        	

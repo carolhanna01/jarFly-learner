@@ -5,7 +5,7 @@
 
 #$ -S /bin/bash
 #$ -j y
-
+#$ -N MAB_NOTD
 
 #$ -t 1-20
 
@@ -14,9 +14,9 @@ hostname
 date
 
 mkdir -p /scratch0/channa/$JOB_ID.$SGE_TASK_ID
-cp -r /home/channa/project/jarFly-learner /scratch0/channa/$JOB_ID.$SGE_TASK_ID
+cp -r /home/channa/run_0.2/jarFly-learner /scratch0/channa/$JOB_ID.$SGE_TASK_ID
 
-export D4J_HOME_LOCAL=/home/channa/project/jarFly-learner/tests/defects4j
+export D4J_HOME_LOCAL=/home/channa/run_0.2/jarFly-learner/tests/defects4j
 export D4J_HOME=/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/defects4j
 export GP4J_HOME=/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner
 export PATH=/share/apps/apache-maven-3.8.2/bin/:$PATH
@@ -39,11 +39,11 @@ while read p; do
 	
 	echo "Starting repair"
 	
-	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" MAB_Average_defects4j PatchedBugs_MAB_Average
+	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" MAB_Average_defects4j PatchedBugs_MAB_NOTD
 
 	rm -rf $D4J_HOME/patched/*
        	
-	done < /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/d4j_v1.1.0_patched_bugs
+	done < /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/tests/d4j_gp4j_setup/d4j_v1.1.0_sample_patched_bugs
 
 echo "Finishing repair"
 rm -rf /scratch0/channa/$JOB_ID.$SGE_TASK_ID
