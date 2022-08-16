@@ -409,6 +409,7 @@ public class MutationOperatorsRL {
 			double prob = this.probabilities.get(mutation);
 			wmut.setValue(prob);
 			retVal.add(wmut);
+			System.out.println("Mutation is: " + mutation + " Probability is: " + prob);
 		}
 		return retVal;
 	}
