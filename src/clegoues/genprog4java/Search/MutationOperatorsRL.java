@@ -223,6 +223,8 @@ public class MutationOperatorsRL {
 			return Mutation.SWAP;
 		} else if (editType.contains("MethodReplacer")) {
 			return Mutation.FUNREP;
+		} else if (editType.contains("ParameterRep")) {
+			return Mutation.PARREP;
 		} else if (editType.contains("ParameterAdd")) {
 			return Mutation.PARADD;
 		} else if (editType.contains("ParameterRem")) {
