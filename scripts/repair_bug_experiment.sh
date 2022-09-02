@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# The following code is a modifed version (for easier experiementation with our approach) of the JarFly replication package at: https://github.com/LASER-UMASS/JavaRepair-replication-package/tree/master/src/repair-technique-execution
+
 #The purpose of this script is to run Genprog in a particular defects4j bug.
 
 #Preconditions:
