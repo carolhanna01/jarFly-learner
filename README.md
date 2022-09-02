@@ -10,4 +10,4 @@ Our additions to the repository structure:
 
 [Scripts](https://github.com/carolhanna01/jarFly-learner/tree/operator-selection/scripts): the scripts we used for running the probability matching, adaptive pursuit, UCB, and epsilon-greedy experiments. Additionally, the scripts that we used for evaluating the patches.
 
-The implementation of the approach are in the [source files](https://github.com/carolhanna01/jarFly-learner/tree/operator-selection/results) of JarFly.
+The implementation of the approach are in the [source files](https://github.com/carolhanna01/jarFly-learner/tree/operator-selection/src) of JarFly.
