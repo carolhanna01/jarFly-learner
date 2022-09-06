@@ -40,10 +40,10 @@ if __name__ == '__main__':
             if (line.startswith("+") or line.startswith("-")) and not line.startswith("++") and not line.startswith("--"):    
 		theirChangedLines.write(line)
 
-	subprocess.call("diff -EZbw " +  args.dir + "/ourTmp" + " " + args.dir + "/theirTmp"  + " | wc -l > " + args.dir + "/resTmp", shell=True)
+	subprocess.call("diff -EZBbw " +  args.dir + "/ourTmp" + " " + args.dir + "/theirTmp"  + " | wc -l > " + args.dir + "/resTmp", shell=True)
         readRes = open(args.dir + "/resTmp" , 'r')
 
-	if readRes.readline() == 0:
+	if readRes.readline().strip() == str(0):
 	    matches += 1 
             if not prevBugMatched:
              	uniqueMatches += 1
