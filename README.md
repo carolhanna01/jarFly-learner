@@ -10,9 +10,9 @@ Our additions to the repository structure:
 
 [Scripts](https://github.com/carolhanna01/jarFly-learner/tree/operator-selection/scripts): the scripts we used for running the probability matching, adaptive pursuit, UCB, and epsilon-greedy experiments. Additionally, the scripts that we used for evaluating the patches.
 
-The implementation of the approach are in the [source files](https://github.com/carolhanna01/jarFly-learner/tree/operator-selection/src) of JarFly. Files changed/added are:
+The implementation of the approach are in the [source files](https://github.com/carolhanna01/jarFly-learner/tree/operator-selection/src) of JarFly. Files added/modified are:
 
-* A- src/clegoues/genprog4java/Search/MutationOperatorsRL.java 
-* M- src/clegoues/genprog4java/Search/GeneticProgramming.java
-* M- src/clegoues/genprog4java/Search/Search.java
-* M- src/clegoues/util/GlobalUtils.java
+* Added- src/clegoues/genprog4java/Search/MutationOperatorsRL.java 
+* Modidied- src/clegoues/genprog4java/Search/GeneticProgramming.java
+* Modified- src/clegoues/genprog4java/Search/Search.java
+* Modified- src/clegoues/util/GlobalUtils.java
