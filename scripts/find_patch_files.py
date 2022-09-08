@@ -51,5 +51,5 @@ if __name__ == '__main__':
 
 			subprocess.call("rm -rf " + variantsOutDir, shell=True)
 			subprocess.call("rm tmp", shell=True)
-			subprocess.call("dos2unix " + args.dir + "/" + "our_patches/*", shell=True)
+    subprocess.call("dos2unix " + args.dir + "/" + "our_patches/*", shell=True)
 
