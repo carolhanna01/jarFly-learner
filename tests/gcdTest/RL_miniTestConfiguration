@@ -1,0 +1,19 @@
+popsize = 5
+seed = 0
+javaVM = /usr/bin/java
+workingDir = ./
+sourceDir = source/
+outputDir = ./tmp/
+libs = ./lib/junittestrunner.jar:./lib/junit-4.10.jar:./jacocoagent.jar:./lib/gcdTest.jar:./lib/gcdTestPos.jar
+classDir = bin/
+targetClassName = test.GCD
+sanity = yes
+search=ga
+edits=append;replace;delete
+negativePathWeight=0.35
+positivePathWeight=0.65
+sample=0.1 
+maxVariants=400
+model=$1
+rewardType=$2
+regenPaths
