@@ -95,6 +95,12 @@ public abstract class Search<G extends EditOperation> {
 			.withHelp( "The type of reward that the mutation operators will be assigned: raw, average, or extreme")
 			.inGroup( "Search Parameters" )
 			.build();
+	protected static String fitnessType = ConfigurationBuilder.of( STRING )
+			.withVarName( "fitnessType" )
+			.withDefault( "raw" )
+			.withHelp( "The type of fitness that the will be used in the credit assignment: raw or relative")
+			.inGroup( "Search Parameters" )
+			.build();
 	protected static String modelPath = ConfigurationBuilder.of( STRING )
 			.withVarName( "modelPath" )
 			.withDefault( "OVERALLModel.txt" )

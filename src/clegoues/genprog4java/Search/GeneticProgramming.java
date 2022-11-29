@@ -53,7 +53,7 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 		for (Representation<G> item : initialPopulation) {
 			boolean found = fitnessEngine.testFitness(0, item);
 			if(Search.model.startsWith("RL")) {
-				muRL.updateOperatorQualities(item);		
+				muRL.updateOperatorQualities(0, item);		
 			}
 			if (found) {
 				this.noteSuccess(item, original, 0);
@@ -115,7 +115,7 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			for (Representation<G> item : incomingPopulation) {
 				boolean found = fitnessEngine.testFitness(gen, item);
 				if(Search.model.startsWith("RL")) {
-					muRL.updateOperatorQualities(item);		
+					muRL.updateOperatorQualities(gen, item);		
 				}
 				if (found) {
 					this.noteSuccess(item, original, gen);

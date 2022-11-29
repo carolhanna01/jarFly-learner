@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import clegoues.genprog4java.fitness.Fitness;
 import clegoues.genprog4java.mut.Mutation;
 import clegoues.genprog4java.mut.WeightedMutation;
+import clegoues.genprog4java.rep.JavaRepresentation;
 import clegoues.genprog4java.rep.Representation;
 import clegoues.genprog4java.mut.edits.java.JavaEditOperation;
 
@@ -184,8 +186,20 @@ public class MutationOperatorsRL {
 	}
 	
 	// Returns the reward value based on the specified reward type
-	private double getReward(Representation rep, Mutation editType) {	
+	private double getReward(Representation rep, Mutation editType, Representation parentRep, int gen) {	
 		double fitness = rep.getFitness();
+		
+		if (Search.fitnessType.startsWith("relative") && gen != 0) {
+			Fitness fitnessEngine = new Fitness();
+			fitnessEngine.testFitness(gen-1, parentRep);
+			double parentFitness = parentRep.getFitness();
+			if (parentFitness != 0) { // else: use fitness value as it (will be a high reward which is what we want anyway for this scenario)
+				fitness /= parentFitness;
+			}
+			System.out.println("Parent fitness is: " + parentFitness);
+			System.out.println("Relative fitness is: " + fitness);
+
+		}
 		
 		int currentChosenCount = this.chosenCount.get(editType);
 		this.chosenCount.put(editType, currentChosenCount + 1);
@@ -377,7 +391,7 @@ public class MutationOperatorsRL {
 	
 	// Activates the specified algorithm
 	
-	public void updateOperatorQualities(Representation rep) {
+	public void updateOperatorQualities(int gen, Representation rep) {
 		
 		ArrayList<JavaEditOperation> genome =  rep.getGenome();
 		if (genome.size() == 0) {
@@ -385,7 +399,13 @@ public class MutationOperatorsRL {
 		}
 		String edit = genome.get(genome.size() - 1).toString();
 		Mutation mut = translateEditType(edit);
-		double reward = getReward(rep, mut);
+		
+		Representation repCopy = rep.copy();
+		ArrayList<JavaEditOperation> parentGenome =  repCopy.getGenome();
+		parentGenome.remove(genome.size() - 1);
+
+		Representation parentRep = new JavaRepresentation(parentGenome, rep.getLocalization());
+		double reward = getReward(rep, mut, parentRep, gen);
 		
 		if (Search.model.endsWith("rawReward")) {
 			rawRewardProbability(rep, mut, reward);
