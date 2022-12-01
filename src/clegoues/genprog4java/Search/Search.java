@@ -208,7 +208,15 @@ public abstract class Search<G extends EditOperation> {
 			case "seqexch":  mutations.add( new WeightedMutation(Mutation.SEQEXCH, weight)); break;
 			case "castermut":  mutations.add(new WeightedMutation(Mutation.CASTERMUT, weight)); break;
 			case "casteemut":  mutations.add(new WeightedMutation(Mutation.CASTEEMUT, weight)); break;
-
+			case "appendsingle": mutations.add(new WeightedMutation(Mutation.APPENDSINGLE, weight)); break;
+			case "appendspecial": mutations.add(new WeightedMutation(Mutation.APPENDSPECIAL, weight)); break;
+			case "appendmulti": mutations.add(new WeightedMutation(Mutation.APPENDMULTI, weight)); break;
+			case "deletesingle": mutations.add(new WeightedMutation(Mutation.DELETESINGLE, weight)); break;
+			case "deletespecial": mutations.add(new WeightedMutation(Mutation.DELETESPECIAL, weight)); break;
+			case "deletemulti": mutations.add(new WeightedMutation(Mutation.DELETEMULTI, weight)); break;
+			case "replacesingle": mutations.add(new WeightedMutation(Mutation.REPLACESINGLE, weight)); break;
+			case "replacespecial": mutations.add(new WeightedMutation(Mutation.REPLACESPECIAL, weight)); break;
+			case "replacemulti": mutations.add(new WeightedMutation(Mutation.REPLACEMULTI, weight)); break;
 			}
 		}
 		Collections.sort(mutations);

@@ -55,6 +55,15 @@ public class JavaEditFactory {
 			return new OffByOneOperation((JavaLocation) dst, sources);
 		case APPEND: return new JavaAppendOperation((JavaLocation) dst, sources);
 		case REPLACE: return new JavaReplaceOperation((JavaLocation) dst, sources);
+		case DELETESINGLE: return new JavaDeleteSingleLineOperation((JavaLocation) dst);
+		case DELETESPECIAL: return new JavaDeleteSpecialLineOperation((JavaLocation) dst);
+		case DELETEMULTI: return new JavaDeleteMultiLineOperation((JavaLocation) dst);
+		case APPENDSINGLE: return new JavaAppendSingleLineOperation((JavaLocation) dst, sources);
+		case APPENDSPECIAL: return new JavaAppendSpecialLineOperation((JavaLocation) dst, sources);
+		case APPENDMULTI: return new JavaAppendMultiLineOperation((JavaLocation) dst, sources);
+		case REPLACESINGLE: return new JavaReplaceSingleLineOperation((JavaLocation) dst, sources);
+		case REPLACESPECIAL: return new JavaReplaceSpecialLineOperation((JavaLocation) dst, sources);
+		case REPLACEMULTI: return new JavaReplaceMultiLineOperation((JavaLocation) dst, sources);
 		case SWAP: return new JavaSwapOperation((JavaLocation) dst, sources);
 		case PARREP:
 			return new MethodParameterReplacer((JavaLocation) dst, sources);
