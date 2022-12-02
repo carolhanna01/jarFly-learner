@@ -87,6 +87,14 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
+import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.ArrayInitializer;
+import org.eclipse.jdt.core.dom.Initializer;
+
+
+
 import clegoues.genprog4java.rep.JavaRepresentation;
 
 public class JavaStatement implements Comparable<JavaStatement>{
@@ -1071,7 +1079,18 @@ if B include return statement
 		this.setStmtId(stmtCounter);
 		this.setASTNode(node);
 	}
+	
+	public boolean isSpecialStatement() {
+		ASTNode buggyNode = this.getASTNode();
+		if(buggyNode instanceof ReturnStatement 
+				|| buggyNode instanceof BreakStatement 
+				|| buggyNode instanceof ContinueStatement
+				|| buggyNode instanceof ThrowStatement
+				|| buggyNode instanceof Initializer
+				|| buggyNode instanceof ArrayInitializer)
+			return true;
 
-
+		return false;
+	}
 
 }
