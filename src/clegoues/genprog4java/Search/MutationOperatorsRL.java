@@ -271,6 +271,24 @@ public class MutationOperatorsRL {
 			return Mutation.CASTERMUT;
 		} else if (editType.contains("CasteeMutator")) {
 			return Mutation.CASTEEMUT;
+		} else if (editType.contains("StmtSingleAppend")) {
+			return Mutation.APPENDSINGLE;
+		} else if (editType.contains("StmtSpecialAppend")) {
+			return Mutation.APPENDSPECIAL;
+		} else if (editType.contains("StmtMultiAppend")) {
+			return Mutation.APPENDMULTI;
+		} else if (editType.contains("StmtSingleDelete")) {
+			return Mutation.DELETESINGLE;
+		} else if (editType.contains("StmtSpecialDelete")) {
+			return Mutation.DELETESPECIAL;
+		} else if (editType.contains("StmtMultiDelete")) {
+			return Mutation.DELETEMULTI;
+		} else if (editType.contains("StmtSingleReplace")) {
+			return Mutation.REPLACESINGLE;
+		} else if (editType.contains("StmtSpecialReplace")) {
+			return Mutation.REPLACESPECIAL;
+		} else if (editType.contains("StmtMultieplace")) {
+			return Mutation.REPLACEMULTI;
 		}
 		
 		throw new IllegalArgumentException("Unsupported Mutation Operation Detected");

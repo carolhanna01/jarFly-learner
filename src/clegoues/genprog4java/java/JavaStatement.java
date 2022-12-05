@@ -75,6 +75,7 @@ import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.SwitchStatement;
@@ -86,7 +87,6 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
-
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
@@ -1080,16 +1080,43 @@ if B include return statement
 		this.setASTNode(node);
 	}
 	
+	private boolean checkSingleLineBlock(ASTNode buggyNode) {
+
+		List pro = buggyNode.structuralPropertiesForType();
+		for (Object e : buggyNode.structuralPropertiesForType()) {
+			Object childList = buggyNode.getStructuralProperty((StructuralPropertyDescriptor) e);
+			
+		    if (!(childList instanceof List) || (((List<ASTNode>) childList).size() != 1)) {
+		    	 return false;
+		    }
+
+		    ASTNode child = ((List<ASTNode>) childList).get(0);
+		    if (child instanceof ReturnStatement 
+						|| child instanceof BreakStatement 
+						|| child instanceof ContinueStatement
+						|| child instanceof ThrowStatement
+						|| child instanceof Initializer
+						|| child instanceof ArrayInitializer) {
+					return true;
+		    }
+			return false;
+		}
+		return false;
+	}
+	
 	public boolean isSpecialStatement() {
 		ASTNode buggyNode = this.getASTNode();
-		if(buggyNode instanceof ReturnStatement 
+		boolean singleSpecialLineBlock = this.checkSingleLineBlock(buggyNode);
+		if( singleSpecialLineBlock
+				|| buggyNode instanceof ReturnStatement 
 				|| buggyNode instanceof BreakStatement 
 				|| buggyNode instanceof ContinueStatement
 				|| buggyNode instanceof ThrowStatement
 				|| buggyNode instanceof Initializer
-				|| buggyNode instanceof ArrayInitializer)
+				|| buggyNode instanceof ArrayInitializer) {
 			return true;
-
+		} 
+		
 		return false;
 	}
 

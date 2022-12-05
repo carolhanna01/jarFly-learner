@@ -223,6 +223,8 @@ public class JavaEditFactory {
 		JavaStatement locationStmt = (JavaStatement) location.getLocation();
 		Localization localization = variant.getLocalization();
 		switch(editType) {
+		case DELETESINGLE: 
+		case DELETESPECIAL:
 		case DELETE:
 		{
 			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
@@ -230,7 +232,41 @@ public class JavaEditFactory {
 			retVal.add(new WeightedHole(stmtHole)); // deletion has no special weight  
 			return retVal;
 		}
+		case APPENDSINGLE:
+		{
+			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
+			List<WeightedAtom> fixStmts = this.scopeHelper(location, variant, editType);
+			for(WeightedAtom fixStmt : fixStmts) {
+				JavaStatement potentialFixStmt = variant.getFromCodeBank(fixStmt.getLeft());
+				ASTNode fixAST = potentialFixStmt.getASTNode();
+
+				if (potentialFixStmt.isSpecialStatement()) {
+					continue;
+				}
+				StatementHole stmtHole = new StatementHole((Statement) fixAST, potentialFixStmt.getStmtId());
+				retVal.add(new WeightedHole(stmtHole, fixStmt.getRight()));
+			}
+			return retVal;
+		}
+		case APPENDSPECIAL: 
+		{
+			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
+			List<WeightedAtom> fixStmts = this.scopeHelper(location, variant, editType);
+			for(WeightedAtom fixStmt : fixStmts) {
+				JavaStatement potentialFixStmt = variant.getFromCodeBank(fixStmt.getLeft());
+				ASTNode fixAST = potentialFixStmt.getASTNode();
+				if (!potentialFixStmt.isSpecialStatement()) {
+					continue;
+				}
+				StatementHole stmtHole = new StatementHole((Statement) fixAST, potentialFixStmt.getStmtId());
+				retVal.add(new WeightedHole(stmtHole, fixStmt.getRight()));
+			}
+
+			return retVal;
+		}
 		case APPEND: 	
+		case REPLACESINGLE: 
+		case REPLACESPECIAL: 
 		case REPLACE:
 		{
 			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
@@ -424,6 +460,9 @@ public class JavaEditFactory {
 			}
 			return retVal;
 		}
+		case DELETEMULTI: 
+		case APPENDMULTI: 
+		case REPLACEMULTI: 
 		}
 		return null;
 	}
@@ -448,6 +487,9 @@ public class JavaEditFactory {
 		JavaStatement locationStmt = (JavaStatement) location.getLocation();
 		Localization localization = variant.getLocalization();
 		switch(editType) {
+		case APPENDSINGLE: 
+		case APPENDSPECIAL: 
+		case APPENDMULTI: 
 		case APPEND: 
 			if(!(locationStmt.getASTNode() instanceof ReturnStatement || locationStmt.getASTNode() instanceof ThrowStatement )){
 				return this.editSources(variant, location,  editType).size() > 0;
@@ -491,6 +533,18 @@ public class JavaEditFactory {
 			return locationStmt.getCasterTypes().size() > 0;
 		case CASTEEMUT:
 			return locationStmt.getCasteeExpressions().size() > 0;
+		case DELETESINGLE: 
+			return !locationStmt.isSpecialStatement();
+		case DELETESPECIAL:
+			return locationStmt.isSpecialStatement();
+		case DELETEMULTI: 
+			//TODO
+		case REPLACESINGLE: 
+			return !locationStmt.isSpecialStatement();
+		case REPLACESPECIAL: 
+			return locationStmt.isSpecialStatement();
+		case REPLACEMULTI: 
+			// TODO
 		}
 		return false;
 	}
