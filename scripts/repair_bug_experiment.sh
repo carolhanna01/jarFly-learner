@@ -105,7 +105,7 @@ if [ -d "$GP4J_HOME" ]; then
   #sudo update-java-alternatives -s $DIROFJAVA7
 
     #cd ~/JavaRepair-results/defects4j-scripts/
-    $GP4J_HOME/tests/d4j_gp4j_setup/prepare_bug_experiment.sh $PROJECT $BUGNUMBER $OPTION $TESTSUITESAMPLE $BUGSFOLDER $DIROFJAVA7 $DIROFJAVA8 $SAMPLENEGTESTS $NEGTESTPATH $SAMPLEPOSTESTS $POSTESTPATH 
+    $GP4J_HOME/scripts/prepare_bug_experiment.sh $PROJECT $BUGNUMBER $OPTION $TESTSUITESAMPLE $BUGSFOLDER $DIROFJAVA7 $DIROFJAVA8 $SAMPLENEGTESTS $NEGTESTPATH $SAMPLEPOSTESTS $POSTESTPATH 
 
     if [ -d "$BUGWD/$WD" ]; then
       #Go to the working directory
