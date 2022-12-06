@@ -1119,5 +1119,35 @@ if B include return statement
 		
 		return false;
 	}
+	
+	public boolean isMultiLineBlock() {
+
+		ASTNode buggyNode = this.getASTNode();
+		int nodesCounter = 0;
+		
+		List pro = buggyNode.structuralPropertiesForType();
+		for (Object e : buggyNode.structuralPropertiesForType()) {
+			Object childList = buggyNode.getStructuralProperty((StructuralPropertyDescriptor) e);
+			
+		    if (childList instanceof ASTNode) {
+	    		nodesCounter++;
+		    }
+		    
+		    if (!(childList instanceof List)) {
+		    	continue;
+		    }
+
+		    for (int i=0; i < ((List)childList).size(); i++) {
+		    	if (((List) childList).get(i) instanceof ASTNode){
+		    		nodesCounter++;
+		    	}
+		    }
+		}
+		
+		if (nodesCounter > 1) {
+			return true;
+		}
+		return false;
+	}
 
 }

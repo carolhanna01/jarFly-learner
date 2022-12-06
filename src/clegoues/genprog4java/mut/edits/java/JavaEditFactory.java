@@ -225,6 +225,7 @@ public class JavaEditFactory {
 		switch(editType) {
 		case DELETESINGLE: 
 		case DELETESPECIAL:
+		case DELETEMULTI:
 		case DELETE:
 		{
 			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
@@ -264,9 +265,26 @@ public class JavaEditFactory {
 
 			return retVal;
 		}
+		case APPENDMULTI: 
+		{
+			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
+			List<WeightedAtom> fixStmts = this.scopeHelper(location, variant, editType);
+			for(WeightedAtom fixStmt : fixStmts) {
+				JavaStatement potentialFixStmt = variant.getFromCodeBank(fixStmt.getLeft());
+				ASTNode fixAST = potentialFixStmt.getASTNode();
+
+				if (!potentialFixStmt.isMultiLineBlock()) {
+					continue;
+				}
+				StatementHole stmtHole = new StatementHole((Statement) fixAST, potentialFixStmt.getStmtId());
+				retVal.add(new WeightedHole(stmtHole, fixStmt.getRight()));
+			}
+			return retVal;
+		}
 		case APPEND: 	
 		case REPLACESINGLE: 
 		case REPLACESPECIAL: 
+		case REPLACEMULTI:
 		case REPLACE:
 		{
 			List<WeightedHole> retVal = new LinkedList<WeightedHole>();
@@ -460,9 +478,6 @@ public class JavaEditFactory {
 			}
 			return retVal;
 		}
-		case DELETEMULTI: 
-		case APPENDMULTI: 
-		case REPLACEMULTI: 
 		}
 		return null;
 	}
@@ -538,13 +553,13 @@ public class JavaEditFactory {
 		case DELETESPECIAL:
 			return locationStmt.isSpecialStatement();
 		case DELETEMULTI: 
-			//TODO
+			return locationStmt.isMultiLineBlock();
 		case REPLACESINGLE: 
 			return !locationStmt.isSpecialStatement();
 		case REPLACESPECIAL: 
 			return locationStmt.isSpecialStatement();
 		case REPLACEMULTI: 
-			// TODO
+			return locationStmt.isMultiLineBlock();
 		}
 		return false;
 	}
