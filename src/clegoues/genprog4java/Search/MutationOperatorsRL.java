@@ -287,7 +287,7 @@ public class MutationOperatorsRL {
 			return Mutation.REPLACESINGLE;
 		} else if (editType.contains("StmtSpecialReplace")) {
 			return Mutation.REPLACESPECIAL;
-		} else if (editType.contains("StmtMultieplace")) {
+		} else if (editType.contains("StmtMultiReplace")) {
 			return Mutation.REPLACEMULTI;
 		}
 		
