@@ -101,6 +101,12 @@ public abstract class Search<G extends EditOperation> {
 			.withHelp( "The type of fitness that the will be used in the credit assignment: raw or relative")
 			.inGroup( "Search Parameters" )
 			.build();
+	protected static String learningPace = ConfigurationBuilder.of( STRING )
+			.withVarName( "learningPace" )
+			.withDefault( "everyGen" )
+			.withHelp( "The pace in which the learning will be activated: everyGen (after every generation) or everyMut (after each mutation)")
+			.inGroup( "Search Parameters" )
+			.build();	
 	protected static String modelPath = ConfigurationBuilder.of( STRING )
 			.withVarName( "modelPath" )
 			.withDefault( "OVERALLModel.txt" )

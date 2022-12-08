@@ -48,11 +48,15 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			Representation<G> newItem = original.copy();
 			this.mutate(newItem);
 			initialPopulation.add(newItem);
+			if(Search.model.startsWith("RL") && Search.learningPace.startsWith("everyMut")) {
+				fitnessEngine.testFitness(0, newItem);
+				muRL.updateOperatorQualities(0, newItem);		
+			}
 		}
 
 		for (Representation<G> item : initialPopulation) {
 			boolean found = fitnessEngine.testFitness(0, item);
-			if(Search.model.startsWith("RL")) {
+			if(Search.model.startsWith("RL") && Search.learningPace.startsWith("everyGen")) {
 				muRL.updateOperatorQualities(0, item);		
 			}
 			if (found) {
@@ -109,12 +113,16 @@ public class GeneticProgramming<G extends EditOperation> extends Search<G>{
 			for (Representation<G> item : incomingPopulation) {
 				Representation<G> newItem = original.copy();
 				this.mutate(item);
+				if(Search.model.startsWith("RL") && Search.learningPace.startsWith("everyMut")) {
+					fitnessEngine.testFitness(gen, item);
+					muRL.updateOperatorQualities(gen, item);		
+				}
 			}
 
 			// step 4: fitness
 			for (Representation<G> item : incomingPopulation) {
 				boolean found = fitnessEngine.testFitness(gen, item);
-				if(Search.model.startsWith("RL")) {
+				if(Search.model.startsWith("RL") && Search.learningPace.startsWith("everyGen")) {
 					muRL.updateOperatorQualities(gen, item);		
 				}
 				if (found) {
