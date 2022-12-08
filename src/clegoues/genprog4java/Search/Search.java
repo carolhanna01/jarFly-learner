@@ -101,6 +101,12 @@ public abstract class Search<G extends EditOperation> {
 			.withHelp( "The type of fitness that the will be used in the credit assignment: raw or relative")
 			.inGroup( "Search Parameters" )
 			.build();
+	protected static String mutationGrouping = ConfigurationBuilder.of( STRING )
+			.withVarName( "mutationGrouping" )
+			.withDefault( "off" )
+			.withHelp( "Turn grouping for PAR templates on or off")
+			.inGroup( "Search Parameters" )
+			.build();
 	protected static String learningPace = ConfigurationBuilder.of( STRING )
 			.withVarName( "learningPace" )
 			.withDefault( "everyGen" )

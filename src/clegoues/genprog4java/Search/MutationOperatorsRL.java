@@ -2,8 +2,10 @@ package clegoues.genprog4java.Search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import clegoues.genprog4java.fitness.Fitness;
 import clegoues.genprog4java.mut.Mutation;
@@ -54,7 +56,22 @@ public class MutationOperatorsRL {
 		
 		// TODO: fine tune the annotated parameters!
 		
-		List<WeightedMutation>  allMutations = Search.availableMutations;
+		List<WeightedMutation>  allMutations = new LinkedList<WeightedMutation> ();
+		
+		if (Search.mutationGrouping.startsWith("on")) {
+			
+			for (WeightedMutation mut: Search.availableMutations) {
+				Mutation grouped = groupPARTemplates(mut.getLeft());
+				List<Mutation> alreadyAdded = allMutations.stream().map( m -> m.getLeft()).collect(Collectors.toList());
+				if (alreadyAdded.contains(grouped)) {
+						continue;
+				}
+				
+				allMutations.add(new WeightedMutation(grouped, mut.getRight()));
+			}
+		} else {
+			allMutations = Search.availableMutations;
+		}
 		this.operators_num = allMutations.size();
 		this.Pmin = 1 / (2 * this.operators_num); // fine tune (1/2K was recommended)
 		this.alpha = 0.8;// Adaption rate: fine tune (this value is from AP paper)
@@ -224,6 +241,47 @@ public class MutationOperatorsRL {
 		return quality + alpha * (reward - quality);
 	}
 
+	private Mutation groupPARTemplates(Mutation mut) throws IllegalArgumentException{
+
+		if (Search.mutationGrouping.startsWith("off")){
+			return mut;
+		}
+		
+		switch(mut) {
+			case FUNREP:
+			case PARREP:
+			case PARADD:
+			case PARREM:
+			case EXPREP:
+			case EXPADD:
+			case EXPREM:
+				return Mutation.EXPFUNCPARAMGROUP;
+			
+			case NULLCHECK:
+			case RANGECHECK:
+			case SIZECHECK:
+			case LBOUNDSET:
+			case UBOUNDSET:
+			case OFFBYONE:
+				return Mutation.BOUNDSGROUP;
+			
+			case CASTCHECK:
+			case OBJINIT:
+			case CASTERMUT:
+			case CASTEEMUT:
+				return Mutation.CASTGROUP;
+				
+			case SEQEXCH:
+			case APPEND:
+			case DELETE:
+			case REPLACE:
+			case SWAP:
+				return mut;
+				
+		}
+		
+		throw new IllegalArgumentException("Unsupported Mutation Operation Detected");
+	}
 
 	private Mutation translateEditType(String editType) throws IllegalArgumentException{
 
@@ -418,6 +476,10 @@ public class MutationOperatorsRL {
 		String edit = genome.get(genome.size() - 1).toString();
 		Mutation mut = translateEditType(edit);
 		
+		if (Search.mutationGrouping.startsWith("on")) {
+			mut = groupPARTemplates(mut);
+		}
+		
 		Representation repCopy = rep.copy();
 		ArrayList<JavaEditOperation> parentGenome =  repCopy.getGenome();
 		parentGenome.remove(genome.size() - 1);
@@ -446,6 +508,9 @@ public class MutationOperatorsRL {
 			
 		for(WeightedMutation wmut: availableMutations){
 			Mutation mutation = (Mutation) ((WeightedMutation)wmut).getLeft();
+			if (Search.mutationGrouping.startsWith("on")) {
+				mutation = groupPARTemplates(mutation);
+			}
 			double prob = this.probabilities.get(mutation);
 			wmut.setValue(prob);
 			retVal.add(wmut);
