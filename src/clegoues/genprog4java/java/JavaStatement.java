@@ -342,6 +342,9 @@ public class JavaStatement implements Comparable<JavaStatement>{
 		if(extendableExpressions == null) {
 			extendableExpressions = new HashMap<Expression, List<Expression>>();
 			final MethodDeclaration md = (MethodDeclaration) ASTUtils.getEnclosingMethod(this.getASTNode());
+			if (md == null) {
+				return extendableExpressions;
+			}
 			final String methodName = md.getName().getIdentifier();
 			final List<Expression> replacements = JavaSemanticInfo.getConditionalExtensionExpressions(methodName, md);
 
@@ -397,6 +400,9 @@ public class JavaStatement implements Comparable<JavaStatement>{
 			methodParamReplacements = new HashMap<Expression,List<Expression>>();
 
 			final MethodDeclaration md = (MethodDeclaration) ASTUtils.getEnclosingMethod(this.getASTNode());
+			if (md == null) {
+				return methodParamReplacements;
+			}
 			final String methodName = md.getName().getIdentifier();
 			final Set<String> namesInScopeHere = JavaSemanticInfo.inScopeAt(this);
 
@@ -500,6 +506,9 @@ public class JavaStatement implements Comparable<JavaStatement>{
 			extendableParameterMethods = new HashMap<ASTNode,List<List<ASTNode>>>();
 
 			final MethodDeclaration md = (MethodDeclaration) ASTUtils.getEnclosingMethod(this.getASTNode());
+			if (md == null) {
+				return extendableParameterMethods;
+			}
 			final String methodName = md.getName().getIdentifier();
 			final Set<String> namesInScopeHere = JavaSemanticInfo.inScopeAt(this);
 
