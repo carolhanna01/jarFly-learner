@@ -616,6 +616,10 @@ public class JavaStatement implements Comparable<JavaStatement>{
 				public boolean visit(MethodInvocation node) {
 					Expression methodCall = node.getExpression();
 					SimpleName methodName = node.getName();
+					
+					if(methodCall == null || methodName == null) {
+						return true;
+					}
 					switch(methodName.getIdentifier()) {
 					case "removeRange":
 					case "subList":
