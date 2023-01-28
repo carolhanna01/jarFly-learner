@@ -1,0 +1,43 @@
+--- ./original/org/apache/commons/math/distribution/FDistributionImpl.java	2022-12-26 17:37:43.000000000 +0000
++++ ./variant291/org/apache/commons/math/distribution/FDistributionImpl.java	2022-12-26 19:52:14.000000000 +0000
+@@ -97,11 +97,12 @@
+      */
+     public double inverseCumulativeProbability(final double p) 
+         throws MathException {
+-        if (p == 0) {
+-            return 0d;
+-        }
+         if (p == 1) {
+-            return Double.POSITIVE_INFINITY;
++			return Double.POSITIVE_INFINITY;
++		}
++        if (p == 1) {
++            {
++			}
+         }
+         return super.inverseCumulativeProbability(p);
+     }
+@@ -143,8 +144,7 @@
+     protected double getInitialDomain(double p) {
+         double ret;
+         double d = getDenominatorDegreesOfFreedom();
+-            // use mean
+-            ret = d / (d - 2.0);
++            ret = 0.0;
+         return ret;
+     }
+     
+@@ -181,7 +181,12 @@
+             throw new IllegalArgumentException(
+                 "degrees of freedom must be positive.");
+         }
+-        this.denominatorDegreesOfFreedom = degreesOfFreedom;
++        {
++			this.denominatorDegreesOfFreedom = degreesOfFreedom;
++			if (degreesOfFreedom <= 0.0) {
++				throw new IllegalArgumentException("degrees of freedom must be positive.");
++			}
++		}
+     }
+     
+     /**

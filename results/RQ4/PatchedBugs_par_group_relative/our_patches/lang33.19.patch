@@ -1,0 +1,13 @@
+--- ./original/org/apache/commons/lang3/ClassUtils.java	2022-12-18 17:27:11.000000000 +0000
++++ ./variant644/org/apache/commons/lang3/ClassUtils.java	2022-12-18 20:04:57.000000000 +0000
+@@ -907,7 +907,9 @@
+         }
+         Class<?>[] classes = new Class[array.length];
+         for (int i = 0; i < array.length; i++) {
+-            classes[i] = array[i].getClass();
++            if (array[i] != null) {
++				classes[i] = array[i].getClass();
++			}
+         }
+         return classes;
+     }

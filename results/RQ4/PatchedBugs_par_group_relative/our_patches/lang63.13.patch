@@ -1,0 +1,63 @@
+--- ./original/org/apache/commons/lang/time/DurationFormatUtils.java	2022-12-16 23:09:59.000000000 +0000
++++ ./variant307/org/apache/commons/lang/time/DurationFormatUtils.java	2022-12-17 00:14:45.000000000 +0000
+@@ -403,28 +403,29 @@
+                     buffer.append(padWithZeros ? StringUtils.leftPad(Integer.toString(hours), count, '0') : Integer
+                             .toString(hours));
+                     lastOutputSeconds = false;
+-                } else if (value == m) {
+-                    buffer.append(padWithZeros ? StringUtils.leftPad(Integer.toString(minutes), count, '0') : Integer
+-                            .toString(minutes));
+-                    lastOutputSeconds = false;
+-                } else if (value == s) {
+-                    buffer.append(padWithZeros ? StringUtils.leftPad(Integer.toString(seconds), count, '0') : Integer
+-                            .toString(seconds));
+-                    lastOutputSeconds = true;
+-                } else if (value == S) {
+-                    if (lastOutputSeconds) {
+-                        milliseconds += 1000;
+-                        String str = padWithZeros
+-                                ? StringUtils.leftPad(Integer.toString(milliseconds), count, '0')
+-                                : Integer.toString(milliseconds);
+-                        buffer.append(str.substring(1));
+-                    } else {
+-                        buffer.append(padWithZeros
+-                                ? StringUtils.leftPad(Integer.toString(milliseconds), count, '0')
+-                                : Integer.toString(milliseconds));
+-                    }
+-                    lastOutputSeconds = false;
+-                }
++                } else {
++					if (value == m) {
++						buffer.append(padWithZeros ? StringUtils.leftPad(Integer.toString(minutes), count, '0')
++								: Integer.toString(minutes));
++						lastOutputSeconds = false;
++					} else if (value == s) {
++						buffer.append(padWithZeros ? StringUtils.leftPad(Integer.toString(seconds), count, '0')
++								: Integer.toString(seconds));
++						lastOutputSeconds = true;
++					} else if (value == S) {
++						if (lastOutputSeconds) {
++							milliseconds += 1000;
++							String str = padWithZeros ? StringUtils.leftPad(Integer.toString(milliseconds), count, '0')
++									: Integer.toString(milliseconds);
++							buffer.append(str.substring(1));
++						} else {
++							buffer.append(padWithZeros ? StringUtils.leftPad(Integer.toString(milliseconds), count, '0')
++									: Integer.toString(milliseconds));
++						}
++						lastOutputSeconds = false;
++					}
++					value = M;
++				}
+             }
+         }
+         return buffer.toString();
+@@ -436,7 +437,7 @@
+         if (endValue < startValue) {
+             int newdiff = startValue - endValue;
+             end.add( field, newdiff );
+-            return newdiff;
++            return 0;
+         } else {
+             return 0;
+         }

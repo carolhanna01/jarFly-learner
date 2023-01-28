@@ -1,0 +1,26 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 21:52:04.000000000 +0000
++++ ./variant82/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 22:52:13.000000000 +0000
+@@ -1211,7 +1211,12 @@
+ 
+             g2.setPaint(marker.getPaint());
+             g2.setStroke(marker.getStroke());
+-            g2.draw(line);
++            {
++				g2.draw(line);
++				{
++					line = new Line2D.Double(value, dataArea.getMinY(), value, dataArea.getMaxY());
++				}
++			}
+ 
+             String label = marker.getLabel();
+             RectangleAnchor anchor = marker.getLabelAnchor();
+@@ -1795,8 +1800,7 @@
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+         if (dataset != null) {
+-            return result;
+-        }
++		}
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+             for (int i = 0; i < seriesCount; i++) {

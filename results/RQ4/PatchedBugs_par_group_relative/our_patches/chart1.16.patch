@@ -1,0 +1,24 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 21:51:55.000000000 +0000
++++ ./variant44/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 21:58:45.000000000 +0000
+@@ -1235,7 +1235,8 @@
+             double end = im.getEndValue();
+             Range range = axis.getRange();
+             if (!(range.intersects(start, end))) {
+-                return;
++                {
++				}
+             }
+ 
+             final Composite savedComposite = g2.getComposite();
+@@ -1794,9 +1795,8 @@
+         }
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+-        if (dataset != null) {
+-            return result;
+-        }
++        {
++		}
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+             for (int i = 0; i < seriesCount; i++) {

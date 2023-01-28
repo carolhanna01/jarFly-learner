@@ -1,0 +1,50 @@
+--- ./original/org/apache/commons/lang3/ClassUtils.java	2022-12-18 14:45:08.000000000 +0000
++++ ./variant645/org/apache/commons/lang3/ClassUtils.java	2022-12-18 17:04:19.000000000 +0000
+@@ -203,7 +203,9 @@
+         }
+ 
+         if (reverseAbbreviationMap.containsKey(className)) {
+-            className = reverseAbbreviationMap.get(className);
++            if (reverseAbbreviationMap != null) {
++				className = reverseAbbreviationMap.get(className);
++			}
+         }
+ 
+         int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+@@ -715,7 +717,11 @@
+ 
+         Class<?>[] convertedClasses = new Class[classes.length];
+         for (int i = 0; i < classes.length; i++) {
+-            convertedClasses[i] = wrapperToPrimitive(classes[i]);
++            {
++				if (i >= 0 && i < classes.length && i >= 0 && i < convertedClasses.length) {
++					convertedClasses[i] = wrapperToPrimitive(classes[i]);
++				}
++			}
+         }
+         return convertedClasses;
+     }
+@@ -907,7 +913,9 @@
+         }
+         Class<?>[] classes = new Class[array.length];
+         for (int i = 0; i < array.length; i++) {
+-            classes[i] = array[i].getClass();
++            if (array[i] != null) {
++				classes[i] = array[i].getClass();
++			}
+         }
+         return classes;
+     }
+@@ -970,7 +978,11 @@
+         if (object == null) {
+             return valueIfNull;
+         }
+-        return getPackageCanonicalName(object.getClass().getName());
++        if (!(object != null)) {
++			return null;
++		} else {
++			return getPackageCanonicalName(object.getClass().getName());
++		}
+     }
+ 
+     /**

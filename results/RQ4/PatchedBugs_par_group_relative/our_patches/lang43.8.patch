@@ -1,0 +1,25 @@
+--- ./original/org/apache/commons/lang/text/ExtendedMessageFormat.java	2022-12-17 10:17:55.000000000 +0000
++++ ./variant380/org/apache/commons/lang/text/ExtendedMessageFormat.java	2022-12-17 12:02:31.000000000 +0000
+@@ -171,8 +171,11 @@
+                             next(pos));
+                     format = getFormat(formatDescription);
+                     if (format == null) {
+-                        stripCustom.append(START_FMT).append(formatDescription);
+-                    }
++						{
++							stripCustom.append(START_FMT).append(formatDescription);
++						}
++						format = getFormat(formatDescription);
++					}
+                 }
+                 foundFormats.add(format);
+                 foundDescriptions.add(format == null ? null : formatDescription);
+@@ -419,7 +422,7 @@
+         int start = pos.getIndex();
+         char[] c = pattern.toCharArray();
+         if (escapingOn && c[start] == QUOTE) {
+-            return appendTo == null ? null : appendTo.append(QUOTE);
++            pos.setIndex(pos.getIndex() + 1);
+         }
+         int lastHold = start;
+         for (int i = pos.getIndex(); i < pattern.length(); i++) {

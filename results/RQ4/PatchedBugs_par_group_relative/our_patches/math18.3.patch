@@ -1,0 +1,26 @@
+--- ./original/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-09 04:16:25.000000000 +0000
++++ ./variant76/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-09 04:43:28.000000000 +0000
+@@ -250,9 +250,8 @@
+      * @param lambda Population size.
+      */
+     public CMAESOptimizer(int lambda) {
+-        this(lambda, null, DEFAULT_MAXITERATIONS, DEFAULT_STOPFITNESS,
+-             DEFAULT_ISACTIVECMA, DEFAULT_DIAGONALONLY,
+-             DEFAULT_CHECKFEASABLECOUNT, DEFAULT_RANDOMGENERATOR, false);
++        {
++		}
+     }
+ 
+     /**
+@@ -754,7 +753,10 @@
+                 RealMatrix artmp = BD.multiply(arzneg);
+                 RealMatrix Cneg = artmp.multiply(diag(weights)).multiply(
+                         artmp.transpose());
+-                oldFac += negalphaold * negccov;
++                {
++					oldFac += negalphaold * negccov;
++					this.random = random;
++				}
+                 C = C.scalarMultiply(oldFac)
+                         // regard old matrix
+                         .add(roneu)

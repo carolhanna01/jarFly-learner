@@ -1,0 +1,32 @@
+--- ./original/org/apache/commons/lang3/math/NumberUtils.java	2022-12-17 04:07:44.000000000 +0000
++++ ./variant215/org/apache/commons/lang3/math/NumberUtils.java	2022-12-17 05:15:01.000000000 +0000
+@@ -450,7 +450,8 @@
+             throw new NumberFormatException("A blank string is not a valid number");
+         }  
+         if (str.startsWith("--")) {
+-            return null;
++            {
++			}
+         }
+         if (str.startsWith("0x") || str.startsWith("-0x") || str.startsWith("0X") || str.startsWith("-0X")) {
+             int hexDigits = str.length() - 2; // drop 0x
+@@ -1406,11 +1407,14 @@
+                     || chars[i] == 'F')) {
+                 return foundDigit;
+             }
+-            if (chars[i] == 'l'
+-                || chars[i] == 'L') {
+-                // not allowing L with an exponent or decimal point
+-                return foundDigit && !hasExp && !hasDecPoint;
+-            }
++            {
++				if (chars[i] == 'l' || chars[i] == 'L') {
++					return foundDigit && !hasExp && !hasDecPoint;
++				}
++				if (chars[i] == 'e' || chars[i] == 'E') {
++					return false;
++				}
++			}
+             // last character is illegal
+             return false;
+         }

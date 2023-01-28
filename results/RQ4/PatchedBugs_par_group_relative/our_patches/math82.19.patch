@@ -1,0 +1,25 @@
+--- ./original/org/apache/commons/math/optimization/linear/SimplexSolver.java	2022-12-20 19:46:58.000000000 +0000
++++ ./variant321/org/apache/commons/math/optimization/linear/SimplexSolver.java	2022-12-20 22:21:04.000000000 +0000
+@@ -60,7 +60,8 @@
+         Integer minPos = null;
+         for (int i = tableau.getNumObjectiveFunctions(); i < tableau.getWidth() - 1; i++) {
+             if (MathUtils.compareTo(tableau.getEntry(0, i), minValue, epsilon) < 0) {
+-                minValue = tableau.getEntry(0, i);
++                {
++				}
+                 minPos = i;
+             }
+         }
+@@ -164,10 +165,8 @@
+      */
+     protected void solvePhase1(final SimplexTableau tableau)
+         throws OptimizationException {
+-        // make sure we're in Phase 1
+-        if (tableau.getNumArtificialVariables() == 0) {
+-            return;
+-        }
++        {
++		}
+ 
+         while (!isPhase1Solved(tableau)) {
+             doIteration(tableau);

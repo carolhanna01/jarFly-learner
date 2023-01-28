@@ -1,0 +1,29 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-12 09:01:57.000000000 +0000
++++ ./variant282/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-12 11:45:10.000000000 +0000
+@@ -1205,9 +1205,13 @@
+                         dataArea.getMaxY());
+             }
+             else if (orientation == PlotOrientation.VERTICAL) {
+-                line = new Line2D.Double(dataArea.getMinX(), v,
+-                        dataArea.getMaxX(), v);
+-            }
++				{
++					line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(), v);
++				}
++				{
++					line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(), v);
++				}
++			}
+ 
+             g2.setPaint(marker.getPaint());
+             g2.setStroke(marker.getStroke());
+@@ -1795,8 +1799,7 @@
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+         if (dataset != null) {
+-            return result;
+-        }
++		}
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+             for (int i = 0; i < seriesCount; i++) {

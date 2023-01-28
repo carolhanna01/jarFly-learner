@@ -1,0 +1,50 @@
+--- ./original/org/apache/commons/math/optimization/linear/SimplexSolver.java	2022-12-23 07:05:15.000000000 +0000
++++ ./variant469/org/apache/commons/math/optimization/linear/SimplexSolver.java	2022-12-23 10:21:08.000000000 +0000
+@@ -60,7 +60,8 @@
+         Integer minPos = null;
+         for (int i = tableau.getNumObjectiveFunctions(); i < tableau.getWidth() - 1; i++) {
+             if (MathUtils.compareTo(tableau.getEntry(0, i), minValue, epsilon) < 0) {
+-                minValue = tableau.getEntry(0, i);
++                {
++				}
+                 minPos = i;
+             }
+         }
+@@ -131,10 +132,8 @@
+             return true;
+         }
+         for (int i = tableau.getNumObjectiveFunctions(); i < tableau.getWidth() - 1; i++) {
+-            if (MathUtils.compareTo(tableau.getEntry(0, i), 0, epsilon) < 0) {
+-                return false;
+-            }
+-        }
++			return false;
++		}
+         return true;
+     }
+ 
+@@ -144,9 +143,8 @@
+      * @return whether the model has been solved
+      */
+     public boolean isOptimal(final SimplexTableau tableau) {
+-        if (tableau.getNumArtificialVariables() > 0) {
+-            return false;
+-        }
++        {
++		}
+         for (int i = tableau.getNumObjectiveFunctions(); i < tableau.getWidth() - 1; i++) {
+             if (MathUtils.compareTo(tableau.getEntry(0, i), 0, epsilon) < 0) {
+                 return false;
+@@ -169,9 +167,9 @@
+             return;
+         }
+ 
+-        while (!isPhase1Solved(tableau)) {
+-            doIteration(tableau);
+-        }
++        while (!isOptimal(tableau)) {
++			doIteration(tableau);
++		}
+ 
+         // if W is not zero then we have no feasible solution
+         if (!MathUtils.equals(tableau.getEntry(0, tableau.getRhsOffset()), 0, epsilon)) {

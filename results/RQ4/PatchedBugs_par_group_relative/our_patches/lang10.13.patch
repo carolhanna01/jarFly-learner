@@ -1,0 +1,40 @@
+--- ./original/org/apache/commons/lang3/time/FastDateParser.java	2022-12-11 12:49:16.000000000 +0000
++++ ./variant310/org/apache/commons/lang3/time/FastDateParser.java	2022-12-11 15:16:58.000000000 +0000
+@@ -265,7 +265,7 @@
+      */
+     @Override
+     public Object parseObject(String source, ParsePosition pos) {
+-        return parse(source, pos);
++        return parseObject(source, pos);
+     }
+ 
+     /* (non-Javadoc)
+@@ -304,13 +304,8 @@
+         boolean wasWhite= false;
+         for(int i= 0; i<value.length(); ++i) {
+             char c= value.charAt(i);
+-            if(Character.isWhitespace(c)) {
+-                if(!wasWhite) {
+-                    wasWhite= true;
+-                    regex.append("\\s*+");
+-                }
+-                continue;
+-            }
++            {
++			}
+             wasWhite= false;
+             switch(c) {
+             case '\'':
+@@ -491,7 +486,11 @@
+      * @return true, if next field will be a number
+      */
+     boolean isNextNumber() {
+-        return nextStrategy!=null && nextStrategy.isNumber();
++        if (!(nextStrategy != null)) {
++			return false;
++		} else {
++			return nextStrategy!=null && nextStrategy.isNumber();
++		}
+     }
+ 
+     /**

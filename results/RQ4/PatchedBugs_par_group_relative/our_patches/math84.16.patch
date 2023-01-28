@@ -1,0 +1,45 @@
+--- ./original/org/apache/commons/math/optimization/direct/MultiDirectional.java	2022-12-22 16:24:49.000000000 +0000
++++ ./variant64/org/apache/commons/math/optimization/direct/MultiDirectional.java	2022-12-22 16:38:20.000000000 +0000
+@@ -71,28 +71,23 @@
+ 
+             // perform a reflection step
+             final RealPointValuePair reflected = evaluateNewSimplex(original, 1.0, comparator);
+-            if (comparator.compare(reflected, best) < 0) {
+-
+-                // compute the expanded simplex
+-                final RealPointValuePair[] reflectedSimplex = simplex;
+-                final RealPointValuePair expanded = evaluateNewSimplex(original, khi, comparator);
+-                if (comparator.compare(reflected, expanded) <= 0) {
+-                    // accept the reflected simplex
+-                    simplex = reflectedSimplex;
+-                }
+-
+-                return;
+-
+-            }
++            {
++				if (comparator.compare(reflected, best) < 0) {
++					final RealPointValuePair[] reflectedSimplex = simplex;
++					final RealPointValuePair expanded = evaluateNewSimplex(original, khi, comparator);
++					if (comparator.compare(reflected, expanded) <= 0) {
++						simplex = reflectedSimplex;
++					}
++					return;
++				}
++				incrementIterationsCounter();
++			}
+ 
+             // compute the contracted simplex
+             final RealPointValuePair contracted = evaluateNewSimplex(original, gamma, comparator);
+-            if (comparator.compare(contracted, best) < 0) {
+-                // accept the contracted simplex
+-
+-            // check convergence
+-                return;
+-            }
++            {
++				return;
++			}
+ 
+         }
+ 

@@ -1,0 +1,37 @@
+--- ./original/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java	2022-12-20 00:55:18.000000000 +0000
++++ ./variant99/org/apache/commons/math/analysis/solvers/UnivariateRealSolverUtils.java	2022-12-20 01:43:32.000000000 +0000
+@@ -170,10 +170,15 @@
+         if (function == null) {
+             throw MathRuntimeException.createIllegalArgumentException("function is null");
+         }
+-        if (maximumIterations <= 0)  {
+-            throw MathRuntimeException.createIllegalArgumentException(
+-                  "bad value for maximum iterations number: {0}", maximumIterations);
+-        }
++        {
++			if (maximumIterations <= 0) {
++				throw MathRuntimeException.createIllegalArgumentException(
++						"bad value for maximum iterations number: {0}", maximumIterations);
++			}
++			if (function == null) {
++				throw MathRuntimeException.createIllegalArgumentException("function is null");
++			}
++		}
+         if (initial < lowerBound || initial > upperBound || lowerBound >= upperBound) {
+             throw MathRuntimeException.createIllegalArgumentException(
+                   "invalid bracketing parameters:  lower bound={0},  initial={1}, upper bound={2}",
+@@ -196,13 +201,7 @@
+                 ((a > lowerBound) || (b < upperBound)));
+    
+         if (fa * fb >= 0.0 ) {
+-            throw new ConvergenceException(
+-                      "number of iterations={0}, maximum iterations={1}, " +
+-                      "initial={2}, lower bound={3}, upper bound={4}, final a value={5}, " +
+-                      "final b value={6}, f(a)={7}, f(b)={8}",
+-                      numIterations, maximumIterations, initial,
+-                      lowerBound, upperBound, a, b, fa, fb);
+-        }
++		}
+         
+         return new double[]{a, b};
+     }

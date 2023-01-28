@@ -1,0 +1,81 @@
+--- ./original/org/apache/commons/math3/optimization/univariate/BrentOptimizer.java	2022-12-16 06:29:48.000000000 +0000
++++ ./variant368/org/apache/commons/math3/optimization/univariate/BrentOptimizer.java	2022-12-16 13:12:57.000000000 +0000
+@@ -77,9 +77,14 @@
+         if (rel < MIN_RELATIVE_TOLERANCE) {
+             throw new NumberIsTooSmallException(rel, MIN_RELATIVE_TOLERANCE, true);
+         }
+-        if (abs <= 0) {
+-            throw new NotStrictlyPositiveException(abs);
+-        }
++        {
++			if (abs <= 0) {
++				throw new NotStrictlyPositiveException(abs);
++			}
++			if (abs <= 0) {
++				throw new NotStrictlyPositiveException(abs);
++			}
++		}
+ 
+         relativeThreshold = rel;
+         absoluteThreshold = abs;
+@@ -178,14 +183,16 @@
+                         d = p / q;
+                         u = x + d;
+ 
+-                        // f must not be evaluated too close to a or b.
+-                        if (u - a < tol2 || b - u < tol2) {
+-                            if (x <= m) {
+-                                d = tol1;
+-                            } else {
+-                                d = -tol1;
+-                            }
+-                        }
++                        {
++							if (u - a < tol2 || b - u < tol2) {
++								if (x <= m) {
++									d = tol1;
++								} else {
++									d = -tol1;
++								}
++							}
++							v = w;
++						}
+                     } else {
+                         // Golden section step.
+                         if (x < m) {
+@@ -208,8 +215,15 @@
+                 // Update by at least "tol1".
+                 if (FastMath.abs(d) < tol1) {
+                     if (d >= 0) {
+-                        u = x + tol1;
+-                    } else {
++						{
++							u = x + tol1;
++						}
++						if (u < x) {
++							a = u;
++						} else {
++							b = u;
++						}
++					} else {
+                         u = x - tol1;
+                     }
+                 } else {
+@@ -242,7 +256,16 @@
+                     fv = fw;
+                     w = x;
+                     fw = fx;
+-                    x = u;
++                    {
++						x = u;
++						{
++							if (d >= 0) {
++								u = x + tol1;
++							} else {
++								u = x - tol1;
++							}
++						}
++					}
+                     fx = fu;
+                 } else {
+                     if (u < x) {

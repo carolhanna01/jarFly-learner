@@ -1,0 +1,22 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 21:51:55.000000000 +0000
++++ ./variant70/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 22:13:42.000000000 +0000
+@@ -596,7 +596,8 @@
+             CategoryURLGenerator generator, boolean notify) {
+         this.urlGeneratorList.set(series, generator);
+         if (notify) {
+-            notifyListeners(new RendererChangeEvent(this));
++            {
++			}
+         }
+     }
+ 
+@@ -1795,8 +1796,7 @@
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+         if (dataset != null) {
+-            return result;
+-        }
++		}
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+             for (int i = 0; i < seriesCount; i++) {

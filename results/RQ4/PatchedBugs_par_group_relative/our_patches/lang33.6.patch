@@ -1,0 +1,56 @@
+--- ./original/org/apache/commons/lang3/ClassUtils.java	2022-12-21 15:44:05.000000000 +0000
++++ ./variant643/org/apache/commons/lang3/ClassUtils.java	2022-12-22 00:06:50.000000000 +0000
+@@ -578,9 +578,11 @@
+             return true;
+         }
+         if (cls.isPrimitive()) {
+-            if (toClass.isPrimitive() == false) {
+-                return false;
+-            }
++            if (toClass != null) {
++				if (toClass.isPrimitive() == false) {
++				    return false;
++				}
++			}
+             if (Integer.TYPE.equals(cls)) {
+                 return Long.TYPE.equals(toClass)
+                     || Float.TYPE.equals(toClass)
+@@ -621,7 +623,11 @@
+             // should never get here
+             return false;
+         }
+-        return toClass.isAssignableFrom(cls);
++        if (!(toClass != null)) {
++			return false;
++		} else {
++			return toClass.isAssignableFrom(cls);
++		}
+     }
+ 
+     /**
+@@ -714,9 +720,11 @@
+         }
+ 
+         Class<?>[] convertedClasses = new Class[classes.length];
+-        for (int i = 0; i < classes.length; i++) {
+-            convertedClasses[i] = wrapperToPrimitive(classes[i]);
+-        }
++        if (classes != null) {
++			for (int i = 0; i < classes.length; i++) {
++			    convertedClasses[i] = wrapperToPrimitive(classes[i]);
++			}
++		}
+         return convertedClasses;
+     }
+ 
+@@ -907,7 +915,9 @@
+         }
+         Class<?>[] classes = new Class[array.length];
+         for (int i = 0; i < array.length; i++) {
+-            classes[i] = array[i].getClass();
++            if (array[i] != null) {
++				classes[i] = array[i].getClass();
++			}
+         }
+         return classes;
+     }

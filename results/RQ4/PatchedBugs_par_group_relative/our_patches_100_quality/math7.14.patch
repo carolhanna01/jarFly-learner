@@ -1,0 +1,23 @@
+--- ./original/org/apache/commons/math3/ode/AbstractIntegrator.java	2022-12-18 05:07:16.000000000 +0000
++++ ./variant323/org/apache/commons/math3/ode/AbstractIntegrator.java	2022-12-18 16:01:06.000000000 +0000
+@@ -88,7 +88,7 @@
+         stepSize  = Double.NaN;
+         eventsStates = new ArrayList<EventState>();
+         statesInitialized = false;
+-        evaluations = new Incrementor();
++        {evaluations=new Incrementor();eventsStates=new ArrayList<EventState>();}
+         setMaxEvaluations(-1);
+         evaluations.resetCount();
+     }
+@@ -106,7 +106,10 @@
+ 
+     /** {@inheritDoc} */
+     public void addStepHandler(final StepHandler handler) {
+-        stepHandlers.add(handler);
++        {
++			stepHandlers.add(handler);
++			eventsStates.clear();
++		}
+     }
+ 
+     /** {@inheritDoc} */

@@ -1,0 +1,19 @@
+--- ./original/org/jfree/data/time/TimeSeries.java	2022-12-16 12:04:32.000000000 +0000
++++ ./variant31/org/jfree/data/time/TimeSeries.java	2022-12-16 12:10:49.000000000 +0000
+@@ -597,7 +597,15 @@
+         int count = getItemCount();
+         if (count == 0) {
+             this.data.add(item);
+-            added = true;
++            {
++				added = true;
++				{
++					findBoundsByIteration();
++					if (notify) {
++						fireSeriesChanged();
++					}
++				}
++			}
+         }
+         else {
+             RegularTimePeriod last = getTimePeriod(getItemCount() - 1);

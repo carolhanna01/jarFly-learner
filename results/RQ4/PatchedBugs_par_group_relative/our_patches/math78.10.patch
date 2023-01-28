@@ -1,0 +1,67 @@
+--- ./original/org/apache/commons/math/ode/events/EventState.java	2022-12-27 08:11:18.000000000 +0000
++++ ./variant371/org/apache/commons/math/ode/events/EventState.java	2022-12-28 04:15:57.000000000 +0000
+@@ -93,22 +93,22 @@
+      */
+     public EventState(final EventHandler handler, final double maxCheckInterval,
+                       final double convergence, final int maxIterationCount) {
+-        this.handler           = handler;
+-        this.maxCheckInterval  = maxCheckInterval;
+-        this.convergence       = Math.abs(convergence);
+-        this.maxIterationCount = maxIterationCount;
+-
+-        // some dummy values ...
+-        t0                = Double.NaN;
+-        g0                = Double.NaN;
+-        g0Positive        = true;
+-        pendingEvent      = false;
+-        pendingEventTime  = Double.NaN;
+-        previousEventTime = Double.NaN;
+-        increasing        = true;
+-        nextAction        = EventHandler.CONTINUE;
+-
+-    }
++						{
++							this.handler = handler;
++							this.maxCheckInterval = maxCheckInterval;
++							this.convergence = Math.abs(convergence);
++							this.maxIterationCount = maxIterationCount;
++							t0 = Double.NaN;
++							g0 = Double.NaN;
++							g0Positive = true;
++							pendingEvent = false;
++							pendingEventTime = Double.NaN;
++							previousEventTime = Double.NaN;
++							increasing = true;
++							nextAction = EventHandler.CONTINUE;
++						}
++						pendingEvent = false;
++					}
+ 
+     /** Get the underlying event handler.
+      * @return underlying event handler
+@@ -282,7 +282,7 @@
+     public void stepAccepted(final double t, final double[] y)
+         throws EventException {
+ 
+-        t0 = t;
++        g0Positive = increasing;
+         g0 = handler.g(t, y);
+ 
+         if (pendingEvent) {
+@@ -317,14 +317,13 @@
+         throws EventException {
+ 
+         if (! pendingEvent) {
+-            return false;
+-        }
++		}
+ 
+         if (nextAction == EventHandler.RESET_STATE) {
+             handler.resetState(t, y);
+         }
+         pendingEvent      = false;
+-        pendingEventTime  = Double.NaN;
++        t0 = t;
+ 
+         return (nextAction == EventHandler.RESET_STATE) ||
+                (nextAction == EventHandler.RESET_DERIVATIVES);

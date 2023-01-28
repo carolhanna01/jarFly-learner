@@ -1,0 +1,30 @@
+--- ./original/org/jfree/chart/axis/Axis.java	2022-12-16 05:41:47.000000000 +0000
++++ ./variant509/org/jfree/chart/axis/Axis.java	2022-12-16 16:37:21.000000000 +0000
+@@ -273,7 +273,8 @@
+     protected Axis(String label) {
+ 
+         this.label = label;
+-        this.visible = DEFAULT_AXIS_VISIBLE;
++        {
++		}
+         this.labelFont = DEFAULT_AXIS_LABEL_FONT;
+         this.labelPaint = DEFAULT_AXIS_LABEL_PAINT;
+         this.labelInsets = DEFAULT_AXIS_LABEL_INSETS;
+@@ -323,10 +324,13 @@
+      * @see #isVisible()
+      */
+     public void setVisible(boolean flag) {
+-        if (flag != this.visible) {
+-            this.visible = flag;
+-            notifyListeners(new AxisChangeEvent(this));
+-        }
++        {
++			if (flag != this.visible) {
++				this.visible = flag;
++				notifyListeners(new AxisChangeEvent(this));
++			}
++			this.visible = DEFAULT_AXIS_VISIBLE;
++		}
+     }
+ 
+     /**

@@ -1,0 +1,21 @@
+--- ./original/org/apache/commons/math/stat/Frequency.java	2022-12-24 17:14:41.000000000 +0000
++++ ./variant562/org/apache/commons/math/stat/Frequency.java	2022-12-24 21:13:51.000000000 +0000
+@@ -300,7 +300,7 @@
+      */
+     @Deprecated
+     public double getPct(Object v) {
+-        return getCumPct((Comparable<?>) v);
++        return getPct((Comparable<?>) v);
+     }
+ 
+     /**
+@@ -401,8 +401,7 @@
+         }
+ 
+         if (c.compare(v, freqTable.firstKey()) < 0) {
+-            return 0;  // v is comparable, but less than first value
+-        }
++		}
+ 
+         if (c.compare(v, freqTable.lastKey()) >= 0) {
+             return getSumFreq();    // v is comparable, but greater than the last value

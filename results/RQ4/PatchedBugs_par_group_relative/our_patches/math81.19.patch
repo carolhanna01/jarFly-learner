@@ -1,0 +1,32 @@
+--- ./original/org/apache/commons/math/linear/EigenDecompositionImpl.java	2022-12-23 16:33:00.000000000 +0000
++++ ./variant534/org/apache/commons/math/linear/EigenDecompositionImpl.java	2022-12-24 02:09:50.000000000 +0000
+@@ -798,10 +798,15 @@
+             z2 = t;
+         }
+         if (z0 < z1) {
+-            final double t = z0;
+-            z0 = z1;
+-            z1 = t;
+-        }
++			{
++				final double t = z0;
++				z0 = z1;
++				z1 = t;
++			}
++			{
++				cachedD = MatrixUtils.createRealDiagonalMatrix(realEigenvalues);
++			}
++		}
+         realEigenvalues[index]     = z0;
+         realEigenvalues[index + 1] = z1;
+         realEigenvalues[index + 2] = z2;
+@@ -1518,7 +1523,8 @@
+ 
+                     // rayleigh quotient residual bound.
+                     if (a2 < cnst1) {
+-                        s = gam * (1 - Math.sqrt(a2)) / (1 + a2);
++                        {
++						}
+                     }
+                     tau = s;
+ 

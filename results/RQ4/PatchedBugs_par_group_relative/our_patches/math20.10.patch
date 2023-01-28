@@ -1,0 +1,25 @@
+--- ./original/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-15 21:38:15.000000000 +0000
++++ ./variant231/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-16 01:18:54.000000000 +0000
+@@ -237,7 +237,8 @@
+      * Default constructor, uses default parameters
+      */
+     public CMAESOptimizer() {
+-        this(0);
++        {
++		}
+     }
+ 
+     /**
+@@ -408,8 +409,10 @@
+                 } else {
+                     updateCovarianceDiagonalOnly(hsig, bestArz, xold);
+                 }
+-                // Adapt step size sigma - Eq. (5)
+-                sigma *= Math.exp(Math.min(1.0,(normps/chiN - 1.)*cs/damps));
++                {
++					sigma *= Math.exp(Math.min(1.0, (normps / chiN - 1.) * cs / damps));
++					C = triu(C, 0).add(triu(C, 1).transpose());
++				}
+                 double bestFitness = fitness[arindex[0]];
+                 double worstFitness = fitness[arindex[arindex.length-1]];
+                 if (bestValue > bestFitness) {

@@ -1,0 +1,42 @@
+--- ./original/org/apache/commons/lang3/time/FastDateParser.java	2022-12-10 11:01:46.000000000 +0000
++++ ./variant300/org/apache/commons/lang3/time/FastDateParser.java	2022-12-10 20:31:11.000000000 +0000
+@@ -304,13 +304,8 @@
+         boolean wasWhite= false;
+         for(int i= 0; i<value.length(); ++i) {
+             char c= value.charAt(i);
+-            if(Character.isWhitespace(c)) {
+-                if(!wasWhite) {
+-                    wasWhite= true;
+-                    regex.append("\\s*+");
+-                }
+-                continue;
+-            }
++            {
++			}
+             wasWhite= false;
+             switch(c) {
+             case '\'':
+@@ -405,8 +400,11 @@
+             }
+             KeyValue[] prior = nameValues.putIfAbsent(fieldInt, fieldKeyValues);
+             if(prior!=null) {
+-                fieldKeyValues= prior;
+-            }
++				{
++					fieldKeyValues = prior;
++				}
++				nextStrategy = null;
++			}
+         }
+         return fieldKeyValues;
+     }
+@@ -544,8 +542,7 @@
+         switch(formatField.charAt(0)) {
+         case '\'':
+             if(formatField.length()>2) {
+-                formatField= formatField.substring(1, formatField.length()-1);
+-            }
++			}
+             //$FALL-THROUGH$
+         default:
+             return new CopyQuotedStrategy(formatField);

@@ -1,0 +1,17 @@
+--- ./original/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-14 20:13:33.000000000 +0000
++++ ./variant186/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-14 22:56:39.000000000 +0000
+@@ -381,8 +381,12 @@
+                     RealMatrix arxk = null;
+                     for (int i = 0; i < checkFeasableCount+1; i++) {
+                         if (diagonalOnly <= 0) {
+-                            arxk = xmean.add(BD.multiply(arz.getColumnMatrix(k))
+-                                    .scalarMultiply(sigma)); // m + sig * Normal(0,C)
++                            {
++								arxk = xmean.add(BD.multiply(arz.getColumnMatrix(k)).scalarMultiply(sigma));
++								if (i >= dimension - 1) {
++									break generationLoop;
++								}
++							}
+                         } else {
+                             arxk = xmean.add(times(diagD,arz.getColumnMatrix(k))
+                                     .scalarMultiply(sigma));

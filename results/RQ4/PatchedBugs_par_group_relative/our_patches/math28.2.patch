@@ -1,0 +1,12 @@
+--- ./original/org/apache/commons/math3/optimization/linear/SimplexSolver.java	2022-12-16 13:15:34.000000000 +0000
++++ ./variant115/org/apache/commons/math3/optimization/linear/SimplexSolver.java	2022-12-16 16:03:02.000000000 +0000
+@@ -142,7 +142,8 @@
+                     for (; i < tableau.getWidth() - 1 && minRow != row; i++) {
+                         if (row == tableau.getBasicRow(i)) {
+                             if (i < minIndex) {
+-                                minIndex = i;
++                                {
++								}
+                                 minRow = row;
+                             }
+                         }

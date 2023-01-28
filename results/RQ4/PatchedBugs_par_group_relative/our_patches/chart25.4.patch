@@ -1,0 +1,58 @@
+--- ./original/org/jfree/chart/renderer/category/StatisticalBarRenderer.java	2022-12-15 19:38:39.000000000 +0000
++++ ./variant411/org/jfree/chart/renderer/category/StatisticalBarRenderer.java	2022-12-16 00:24:39.000000000 +0000
+@@ -204,9 +204,9 @@
+         StatisticalCategoryDataset statData = (StatisticalCategoryDataset) data;
+ 
+         PlotOrientation orientation = plot.getOrientation();
+-        if (orientation == PlotOrientation.HORIZONTAL) {
+-            drawHorizontalItem(g2, state, dataArea, plot, domainAxis, 
+-                    rangeAxis, statData, row, column);
++        if (orientation == PlotOrientation.VERTICAL) {
++            {
++			}
+         }
+         else if (orientation == PlotOrientation.VERTICAL) {
+             drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis, 
+@@ -273,12 +273,25 @@
+         }
+         else if (lclip <= 0.0) { // cases 5, 6, 7 and 8
+             if (value >= uclip) {
+-                value = uclip;
+-            }
+-            else {
++				{
++					value = uclip;
++				}
++				g2.setStroke(this.errorIndicatorStroke);
++			} else {
+                 if (value <= lclip) {
+-                    value = lclip;
+-                }
++					{
++						value = lclip;
++					}
++					{
++						if (value >= uclip) {
++							return;
++						}
++						base = uclip;
++						if (value <= lclip) {
++							value = lclip;
++						}
++					}
++				}
+             }
+         }
+         else { // cases 9, 10, 11 and 12
+@@ -483,7 +496,10 @@
+             g2.draw(line);
+             line = new Line2D.Double(rectX + rectWidth / 2.0d - 5.0d, lowVal,
+                                      rectX + rectWidth / 2.0d + 5.0d, lowVal);
+-            g2.draw(line);
++            {
++				g2.draw(line);
++				g2.setStroke(this.errorIndicatorStroke);
++			}
+         
+         CategoryItemLabelGenerator generator = getItemLabelGenerator(row, 
+                 column);

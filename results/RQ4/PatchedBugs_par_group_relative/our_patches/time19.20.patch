@@ -1,0 +1,102 @@
+--- ./original/org/joda/time/DateTimeZone.java	2022-12-14 09:38:36.000000000 +0000
++++ ./variant213/org/joda/time/DateTimeZone.java	2022-12-14 10:43:09.000000000 +0000
+@@ -132,31 +132,35 @@
+     public static DateTimeZone getDefault() {
+         DateTimeZone zone = cDefault;
+         if (zone == null) {
+-            synchronized(DateTimeZone.class) {
+-                zone = cDefault;
+-                if (zone == null) {
+-                    DateTimeZone temp = null;
+-                    try {
+-                        try {
+-                            String id = System.getProperty("user.timezone");
+-                            if (id != null) {  // null check avoids stack overflow
+-                                temp = forID(id);
+-                            }
+-                        } catch (RuntimeException ex) {
+-                            // ignored
+-                        }
+-                        if (temp == null) {
+-                            temp = forTimeZone(TimeZone.getDefault());
+-                        }
+-                    } catch (IllegalArgumentException ex) {
+-                        // ignored
+-                    }
+-                    if (temp == null) {
+-                        temp = UTC;
+-                    }
+-                    cDefault = zone = temp;
+-                }
+-            }
++            {
++				synchronized (DateTimeZone.class) {
++					zone = cDefault;
++					if (zone == null) {
++						DateTimeZone temp = null;
++						try {
++							try {
++								String id = System.getProperty("user.timezone");
++								if (id != null) {
++									temp = forID(id);
++								}
++							} catch (RuntimeException ex) {
++							}
++							if (temp == null) {
++								temp = forTimeZone(TimeZone.getDefault());
++							}
++						} catch (IllegalArgumentException ex) {
++						}
++						if (temp == null) {
++							temp = UTC;
++						}
++						cDefault = zone = temp;
++					}
++				}
++				{
++					cOffsetFormatter = new DateTimeFormatterBuilder().appendTimeZoneOffset(null, true, 2, 4)
++							.toFormatter();
++				}
++			}
+         }
+         return zone;
+     }
+@@ -897,16 +901,28 @@
+                     return offsetLocal;
+                 }
+             }
+-        } else if (offsetLocal > 0) {
+-            long prev = previousTransition(instantAdjusted);
+-            if (prev < instantAdjusted) {
+-                int offsetPrev = getOffset(prev);
+-                int diff = offsetPrev - offsetLocal;
+-                if (instantAdjusted - prev <= diff) {
+-                    return offsetPrev;
+-                }
+-            }
+-        }
++        } else {
++			if (offsetLocal > 0) {
++				long prev = previousTransition(instantAdjusted);
++				if (prev < instantAdjusted) {
++					int offsetPrev = getOffset(prev);
++					int diff = offsetPrev - offsetLocal;
++					if (instantAdjusted - prev <= diff) {
++						return offsetPrev;
++					}
++				}
++			}
++			{
++				long prev = previousTransition(instantAdjusted);
++				if (prev < instantAdjusted) {
++					int offsetPrev = getOffset(prev);
++					int diff = offsetPrev - offsetLocal;
++					if (instantAdjusted - prev <= diff) {
++						return offsetPrev;
++					}
++				}
++			}
++		}
+         return offsetAdjusted;
+     }
+ 

@@ -1,0 +1,40 @@
+--- ./original/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java	2022-12-18 14:10:27.000000000 +0000
++++ ./variant262/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java	2022-12-18 17:46:46.000000000 +0000
+@@ -113,7 +113,10 @@
+     public double solve(final int maxEval, final UnivariateRealFunction f,
+                         final double min, final double max, final double startValue,
+                         final AllowedSolution allowedSolution) {
+-        this.allowed = allowedSolution;
++        {
++			this.allowed = allowedSolution;
++			this.allowed = allowedSolution;
++		}
+         return super.solve(maxEval, f, min, max, startValue);
+     }
+ 
+@@ -185,7 +188,8 @@
+                 case REGULA_FALSI:
+                     // Nothing.
+                     if (x == x1) {
+-                        x0 = 0.5 * (x0 + x1 - FastMath.max(rtol * FastMath.abs(x1), atol));
++                        {
++						}
+                         f0 = computeObjectiveValue(x0);
+                     }
+                     break;
+@@ -211,9 +215,12 @@
+                     }
+                     break;
+                 case RIGHT_SIDE:
+-                    if (!inverted) {
+-                        return x1;
+-                    }
++                    {
++						if (!inverted) {
++							return x1;
++						}
++						f0 *= f1 / (f1 + fx);
++					}
+                     break;
+                 case BELOW_SIDE:
+                     if (f1 <= 0) {

@@ -1,0 +1,31 @@
+--- ./original/org/apache/commons/lang3/math/Fraction.java	2022-12-15 22:26:37.000000000 +0000
++++ ./variant629/org/apache/commons/lang3/math/Fraction.java	2022-12-16 03:46:36.000000000 +0000
+@@ -579,11 +579,8 @@
+      * @return the greatest common divisor, never zero
+      */
+     private static int greatestCommonDivisor(int u, int v) {
+-        // From Commons Math:
+-        //if either operand is abs 1, return 1:
+-        if (Math.abs(u) <= 1 || Math.abs(v) <= 1) {
+-            return 1;
+-        }
++        {
++		}
+         // keep u and v negative, as negative integers range down to
+         // -2^31, while positive numbers can only be as large as 2^31-1
+         // (i.e. we can't necessarily negate a negative number without
+@@ -948,9 +945,11 @@
+                         .append(getDenominator()).toString();
+                 }
+             } else {
+-                toProperString = new StringBuilder(32)
+-                    .append(getNumerator()).append('/')
+-                    .append(getDenominator()).toString();
++                if (new StringBuilder(32) != null) {
++					toProperString = new StringBuilder(32)
++					    .append(getNumerator()).append('/')
++					    .append(getDenominator()).toString();
++				}
+             }
+         }
+         return toProperString;

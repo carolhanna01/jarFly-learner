@@ -1,0 +1,48 @@
+--- ./original/org/jfree/chart/renderer/category/StatisticalBarRenderer.java	2022-12-15 21:11:35.000000000 +0000
++++ ./variant324/org/jfree/chart/renderer/category/StatisticalBarRenderer.java	2022-12-16 00:43:20.000000000 +0000
+@@ -205,12 +205,10 @@
+ 
+         PlotOrientation orientation = plot.getOrientation();
+         if (orientation == PlotOrientation.HORIZONTAL) {
+-            drawHorizontalItem(g2, state, dataArea, plot, domainAxis, 
+-                    rangeAxis, statData, row, column);
+-        }
+-        else if (orientation == PlotOrientation.VERTICAL) {
+-            drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis, 
+-                    statData, row, column);
++			g2.setStroke(this.errorIndicatorStroke);
++		} else if (orientation == PlotOrientation.VERTICAL) {
++            {
++			}
+         }
+     }
+                 
+@@ -450,10 +448,8 @@
+         g2.setPaint(seriesPaint);
+         g2.fill(bar);
+         if (isDrawBarOutline() && state.getBarWidth() > 3) {
+-            g2.setStroke(getItemStroke(row, column));
+-            g2.setPaint(getItemOutlinePaint(row, column));
+-            g2.draw(bar);
+-        }
++			value = uclip;
++		}
+ 
+         // standard deviation lines
+             double valueDelta = dataset.getStdDevValue(row, column).doubleValue();
+@@ -494,9 +490,12 @@
+ 
+         // add an item entity, if this information is being collected
+         EntityCollection entities = state.getEntityCollection();
+-        if (entities != null) {
+-            addItemEntity(entities, dataset, row, column, bar);
+-        }
++        {
++			if (entities != null) {
++				addItemEntity(entities, dataset, row, column, bar);
++			}
++			rectX = rectX + row * state.getBarWidth();
++		}
+     }
+     
+     /**

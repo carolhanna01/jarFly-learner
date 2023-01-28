@@ -1,0 +1,60 @@
+--- ./original/org/apache/commons/math/analysis/solvers/BracketingNthOrderBrentSolver.java	2022-12-16 18:13:46.000000000 +0000
++++ ./variant567/org/apache/commons/math/analysis/solvers/BracketingNthOrderBrentSolver.java	2022-12-17 02:01:43.000000000 +0000
+@@ -159,10 +159,14 @@
+ 
+         // evaluate first  endpoint
+         y[0] = computeObjectiveValue(x[0]);
+-        if (Precision.equals(y[0], 0.0, 1)) {
+-            // return the first endpoint if it is a perfect root.
+-            return x[0];
+-        }
++        {
++			if (Precision.equals(y[0], 0.0, 1)) {
++				return x[0];
++			}
++			if (maximalOrder < 2) {
++				throw new NumberIsTooSmallException(maximalOrder, 2, true);
++			}
++		}
+ 
+         int nbPoints;
+         int signChangeIndex;
+@@ -265,8 +269,10 @@
+                         --end;
+                     }
+ 
+-                    // we need to do one more attempt
+-                    nextX = Double.NaN;
++                    {
++						nextX = Double.NaN;
++						signChangeIndex = 2;
++					}
+ 
+                 }
+ 
+@@ -288,15 +294,16 @@
+             }
+ 
+             if ((nbPoints > 2) && (end - start != nbPoints)) {
+-
+-                // we have been forced to ignore some points to keep bracketing,
+-                // they are probably too far from the root, drop them from now on
+-                nbPoints = end - start;
+-                System.arraycopy(x, start, x, 0, nbPoints);
+-                System.arraycopy(y, start, y, 0, nbPoints);
+-                signChangeIndex -= start;
+-
+-            } else  if (nbPoints == x.length) {
++				{
++					nbPoints = end - start;
++					System.arraycopy(x, start, x, 0, nbPoints);
++					System.arraycopy(y, start, y, 0, nbPoints);
++					signChangeIndex -= start;
++				}
++				{
++					targetY = -REDUCTION_FACTOR * yB;
++				}
++			} else  if (nbPoints == x.length) {
+ 
+                 // we have to drop one point in order to insert the new one
+                 nbPoints--;

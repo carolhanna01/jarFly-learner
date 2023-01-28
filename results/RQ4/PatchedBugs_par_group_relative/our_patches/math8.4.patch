@@ -1,0 +1,53 @@
+--- ./original/org/apache/commons/math3/distribution/DiscreteDistribution.java	2022-12-18 14:32:02.000000000 +0000
++++ ./variant205/org/apache/commons/math3/distribution/DiscreteDistribution.java	2022-12-18 16:32:14.000000000 +0000
+@@ -123,10 +123,12 @@
+         double probability = 0;
+ 
+         for (int i = 0; i < probabilities.length; i++) {
+-            if ((x == null && singletons.get(i) == null) ||
+-                (x != null && x.equals(singletons.get(i)))) {
+-                probability += probabilities[i];
+-            }
++            if (singletons != null && x != null && singletons != null) {
++				if ((x == null && singletons.get(i) == null) ||
++				    (x != null && x.equals(singletons.get(i)))) {
++				    probability += probabilities[i];
++				}
++			}
+         }
+ 
+         return probability;
+@@ -157,12 +159,15 @@
+         final double randomValue = random.nextDouble();
+         double sum = 0;
+ 
+-        for (int i = 0; i < probabilities.length; i++) {
+-            sum += probabilities[i];
+-            if (randomValue < sum) {
+-                return singletons.get(i);
+-            }
+-        }
++        {
++			for (int i = 0; i < probabilities.length; i++) {
++				sum += probabilities[i];
++				if (randomValue < sum) {
++					return singletons.get(i);
++				}
++			}
++			double probability = 0;
++		}
+ 
+         /* This should never happen, but it ensures we will return a correct
+          * object in case the loop above has some floating point inequality
+@@ -186,9 +191,8 @@
+ 
+         final T[]out = (T[]) java.lang.reflect.Array.newInstance(singletons.get(0).getClass(), sampleSize);
+ 
+-        for (int i = 0; i < sampleSize; i++) {
+-            out[i] = sample();
+-        }
++        {
++		}
+ 
+         return out;
+ 

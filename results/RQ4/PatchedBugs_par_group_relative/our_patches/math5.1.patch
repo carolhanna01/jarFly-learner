@@ -1,0 +1,23 @@
+--- ./original/org/apache/commons/math3/complex/Complex.java	2022-12-19 16:32:20.000000000 +0000
++++ ./variant233/org/apache/commons/math3/complex/Complex.java	2022-12-19 20:37:29.000000000 +0000
+@@ -342,7 +342,7 @@
+         }
+         if (other instanceof Complex){
+             Complex c = (Complex)other;
+-            if (c.isNaN) {
++            if (isNaN) {
+                 return isNaN;
+             } else {
+                 return (real == c.real) && (imaginary == c.imaginary);
+@@ -566,9 +566,8 @@
+      * @since 1.2
+      */
+     public Complex acos() {
+-        if (isNaN) {
+-            return NaN;
+-        }
++        {
++		}
+ 
+         return this.add(this.sqrt1z().multiply(I)).log().multiply(I.negate());
+     }

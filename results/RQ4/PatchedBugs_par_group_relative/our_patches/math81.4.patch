@@ -1,0 +1,26 @@
+--- ./original/org/apache/commons/math/linear/EigenDecompositionImpl.java	2022-12-18 18:40:04.000000000 +0000
++++ ./variant76/org/apache/commons/math/linear/EigenDecompositionImpl.java	2022-12-18 18:53:59.000000000 +0000
+@@ -1185,8 +1185,11 @@
+ 
+             final double middle = 0.5 * (left + right);
+             if (countEigenValues(middle, index, n) >= 1) {
+-                right = middle;
+-            } else {
++				{
++					right = middle;
++				}
++				pingPong = 0;
++			} else {
+                 left = middle;
+             }
+ 
+@@ -1481,7 +1484,8 @@
+                         if (work[nn - 5]  >  work[nn - 7]) {
+                             return;
+                         }
+-                        b2 = work[nn - 5] / work[nn - 7];
++                        {
++						}
+                         np = nn - 9;
+                     } else {
+                         np = nn - 2 * pingPong;

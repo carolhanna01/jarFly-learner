@@ -1,0 +1,40 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 18:59:17.000000000 +0000
++++ ./variant100/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-08 20:00:43.000000000 +0000
+@@ -1724,15 +1724,18 @@
+         }
+ 
+         if (this.baseURLGenerator != null) {
+-            if (this.baseURLGenerator instanceof PublicCloneable) {
+-                PublicCloneable pc = (PublicCloneable) this.baseURLGenerator;
+-                clone.baseURLGenerator = (CategoryURLGenerator) pc.clone();
+-            }
+-            else {
+-                throw new CloneNotSupportedException(
+-                        "Base item URL generator not cloneable.");
+-            }
+-        }
++			{
++				if (this.baseURLGenerator instanceof PublicCloneable) {
++					PublicCloneable pc = (PublicCloneable) this.baseURLGenerator;
++					clone.baseURLGenerator = (CategoryURLGenerator) pc.clone();
++				} else {
++					throw new CloneNotSupportedException("Base item URL generator not cloneable.");
++				}
++			}
++			{
++				return null;
++			}
++		}
+ 
+         if (this.legendItemLabelGenerator instanceof PublicCloneable) {
+             clone.legendItemLabelGenerator = (CategorySeriesLabelGenerator)
+@@ -1795,7 +1798,8 @@
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+         if (dataset != null) {
+-            return result;
++            {
++			}
+         }
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {

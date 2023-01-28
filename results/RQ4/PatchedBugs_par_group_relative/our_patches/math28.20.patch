@@ -1,0 +1,12 @@
+--- ./original/org/apache/commons/math3/optimization/linear/SimplexSolver.java	2022-12-17 07:38:01.000000000 +0000
++++ ./variant4/org/apache/commons/math3/optimization/linear/SimplexSolver.java	2022-12-17 07:42:06.000000000 +0000
+@@ -121,7 +121,8 @@
+                         int column = i + tableau.getArtificialVariableOffset();
+                         final double entry = tableau.getEntry(row, column);
+                         if (Precision.equals(entry, 1d, maxUlps) && row.equals(tableau.getBasicRow(column))) {
+-                            return row;
++                            {
++							}
+                         }
+                     }
+                 }

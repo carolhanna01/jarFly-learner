@@ -1,0 +1,45 @@
+--- ./original/org/apache/commons/lang3/ClassUtils.java	2022-12-18 14:06:49.000000000 +0000
++++ ./variant411/org/apache/commons/lang3/ClassUtils.java	2022-12-18 15:03:53.000000000 +0000
+@@ -705,9 +705,12 @@
+      * @since 2.4
+      */
+     public static Class<?>[] wrappersToPrimitives(Class<?>[] classes) {
+-        if (classes == null) {
+-            return null;
+-        }
++        {
++			if (classes == null) {
++				return null;
++			}
++			addAbbreviation("boolean", "Z");
++		}
+ 
+         if (classes.length == 0) {
+             return classes;
+@@ -907,7 +910,9 @@
+         }
+         Class<?>[] classes = new Class[array.length];
+         for (int i = 0; i < array.length; i++) {
+-            classes[i] = array[i].getClass();
++            if (array[i] != null) {
++				classes[i] = array[i].getClass();
++			}
+         }
+         return classes;
+     }
+@@ -923,9 +928,12 @@
+      * @since 2.4
+      */
+     public static String getShortCanonicalName(Object object, String valueIfNull) {
+-        if (object == null) {
+-            return valueIfNull;
+-        }
++        {
++			if (object == null) {
++				return valueIfNull;
++			}
++			addAbbreviation("short", "S");
++		}
+         return getShortCanonicalName(object.getClass().getName());
+     }
+ 

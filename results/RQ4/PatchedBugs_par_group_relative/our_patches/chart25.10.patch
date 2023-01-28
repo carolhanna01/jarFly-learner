@@ -1,0 +1,20 @@
+--- ./original/org/jfree/chart/renderer/category/StatisticalBarRenderer.java	2022-12-15 21:05:20.000000000 +0000
++++ ./variant46/org/jfree/chart/renderer/category/StatisticalBarRenderer.java	2022-12-15 21:13:21.000000000 +0000
+@@ -205,13 +205,10 @@
+ 
+         PlotOrientation orientation = plot.getOrientation();
+         if (orientation == PlotOrientation.HORIZONTAL) {
+-            drawHorizontalItem(g2, state, dataArea, plot, domainAxis, 
+-                    rangeAxis, statData, row, column);
+-        }
+-        else if (orientation == PlotOrientation.VERTICAL) {
+-            drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis, 
+-                    statData, row, column);
+-        }
++            {
++			}
++        } else {
++		}
+     }
+                 
+     /**

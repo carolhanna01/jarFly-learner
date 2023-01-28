@@ -1,0 +1,41 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-11 12:36:55.000000000 +0000
++++ ./variant315/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-11 20:13:28.000000000 +0000
+@@ -1795,7 +1795,8 @@
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+         if (dataset != null) {
+-            return result;
++            {
++			}
+         }
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+@@ -1867,15 +1868,19 @@
+         }
+         Shape s = hotspot;
+         if (hotspot == null) {
+-            double r = getDefaultEntityRadius();
+-            double w = r * 2;
+-            if (getPlot().getOrientation() == PlotOrientation.VERTICAL) {
+-                s = new Ellipse2D.Double(entityX - r, entityY - r, w, w);
+-            }
+-            else {
+-                s = new Ellipse2D.Double(entityY - r, entityX - r, w, w);
+-            }
+-        }
++			{
++				double r = getDefaultEntityRadius();
++				double w = r * 2;
++				if (getPlot().getOrientation() == PlotOrientation.VERTICAL) {
++					s = new Ellipse2D.Double(entityX - r, entityY - r, w, w);
++				} else {
++					s = new Ellipse2D.Double(entityY - r, entityX - r, w, w);
++				}
++			}
++			{
++				return;
++			}
++		}
+         String tip = null;
+         CategoryToolTipGenerator generator = getToolTipGenerator(row, column,
+                 selected);

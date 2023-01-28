@@ -1,0 +1,12 @@
+--- ./original/org/apache/commons/math/distribution/FDistributionImpl.java	2022-12-22 21:07:43.000000000 +0000
++++ ./variant130/org/apache/commons/math/distribution/FDistributionImpl.java	2022-12-22 21:39:15.000000000 +0000
+@@ -143,8 +143,7 @@
+     protected double getInitialDomain(double p) {
+         double ret;
+         double d = getDenominatorDegreesOfFreedom();
+-            // use mean
+-            ret = d / (d - 2.0);
++            ret = 0.0;
+         return ret;
+     }
+     

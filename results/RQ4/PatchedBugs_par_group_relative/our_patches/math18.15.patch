@@ -1,0 +1,28 @@
+--- ./original/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-11 11:07:36.000000000 +0000
++++ ./variant48/org/apache/commons/math3/optimization/direct/CMAESOptimizer.java	2022-12-11 11:19:33.000000000 +0000
+@@ -243,7 +243,8 @@
+      * Default constructor, uses default parameters
+      */
+     public CMAESOptimizer() {
+-        this(0);
++        {
++		}
+     }
+ 
+     /**
+@@ -430,13 +431,8 @@
+                         }
+                     }
+                 }
+-                // handle termination criteria
+-                // Break, if fitness is good enough
+-                if (stopFitness != 0) { // only if stopFitness is defined
+-                    if (bestFitness < (isMinimize ? stopFitness : -stopFitness)) {
+-                        break generationLoop;
+-                    }
+-                }
++                {
++				}
+                 double[] sqrtDiagC = sqrt(diagC).getColumn(0);
+                 double[] pcCol = pc.getColumn(0);
+                 for (int i = 0; i < dimension; i++) {

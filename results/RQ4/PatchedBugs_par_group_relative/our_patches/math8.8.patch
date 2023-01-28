@@ -1,0 +1,23 @@
+--- ./original/org/apache/commons/math3/distribution/DiscreteDistribution.java	2022-12-23 07:23:32.000000000 +0000
++++ ./variant59/org/apache/commons/math3/distribution/DiscreteDistribution.java	2022-12-23 07:47:35.000000000 +0000
+@@ -141,9 +141,7 @@
+     public List<Pair<T, Double>> getSamples() {
+         final List<Pair<T, Double>> samples = new ArrayList<Pair<T, Double>>(probabilities.length);
+ 
+-        for (int i = 0; i < probabilities.length; i++) {
+-            samples.add(new Pair<T, Double>(singletons.get(i), probabilities[i]));
+-        }
++        for (int i = 0; i < probabilities.length; i++) samples.add(new Pair<T, Double>(singletons.get(i),probabilities[i]));
+ 
+         return samples;
+     }
+@@ -187,8 +185,7 @@
+         final T[]out = (T[]) java.lang.reflect.Array.newInstance(singletons.get(0).getClass(), sampleSize);
+ 
+         for (int i = 0; i < sampleSize; i++) {
+-            out[i] = sample();
+-        }
++		}
+ 
+         return out;
+ 

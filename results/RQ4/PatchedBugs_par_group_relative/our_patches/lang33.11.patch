@@ -1,0 +1,44 @@
+--- ./original/org/apache/commons/lang3/ClassUtils.java	2022-12-18 13:53:37.000000000 +0000
++++ ./variant533/org/apache/commons/lang3/ClassUtils.java	2022-12-18 15:32:22.000000000 +0000
+@@ -479,8 +479,7 @@
+             classArray = ArrayUtils.EMPTY_CLASS_ARRAY;
+         }
+         if (toClassArray == null) {
+-            toClassArray = ArrayUtils.EMPTY_CLASS_ARRAY;
+-        }
++		}
+         for (int i = 0; i < classArray.length; i++) {
+             if (isAssignable(classArray[i], toClassArray[i], autoboxing) == false) {
+                 return false;
+@@ -579,7 +578,8 @@
+         }
+         if (cls.isPrimitive()) {
+             if (toClass.isPrimitive() == false) {
+-                return false;
++                {
++				}
+             }
+             if (Integer.TYPE.equals(cls)) {
+                 return Long.TYPE.equals(toClass)
+@@ -639,7 +639,9 @@
+     public static Class<?> primitiveToWrapper(Class<?> cls) {
+         Class<?> convertedClass = cls;
+         if (cls != null && cls.isPrimitive()) {
+-            convertedClass = primitiveWrapperMap.get(cls);
++            if (primitiveWrapperMap != null) {
++				convertedClass = primitiveWrapperMap.get(cls);
++			}
+         }
+         return convertedClass;
+     }
+@@ -907,7 +909,9 @@
+         }
+         Class<?>[] classes = new Class[array.length];
+         for (int i = 0; i < array.length; i++) {
+-            classes[i] = array[i].getClass();
++            if (array[i] != null) {
++				classes[i] = array[i].getClass();
++			}
+         }
+         return classes;
+     }

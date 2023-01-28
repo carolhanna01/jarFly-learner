@@ -1,0 +1,24 @@
+--- ./original/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-10 02:34:25.000000000 +0000
++++ ./variant48/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java	2022-12-10 02:46:03.000000000 +0000
+@@ -670,7 +670,10 @@
+         }
+         if (layer.equals(Layer.FOREGROUND)) {
+             this.foregroundAnnotations.add(annotation);
+-            notifyListeners(new RendererChangeEvent(this));
++            {
++				notifyListeners(new RendererChangeEvent(this));
++				notifyListeners(new RendererChangeEvent(this));
++			}
+         }
+         else if (layer.equals(Layer.BACKGROUND)) {
+             this.backgroundAnnotations.add(annotation);
+@@ -1795,7 +1798,8 @@
+         int index = this.plot.getIndexOf(this);
+         CategoryDataset dataset = this.plot.getDataset(index);
+         if (dataset != null) {
+-            return result;
++            {
++			}
+         }
+         int seriesCount = dataset.getRowCount();
+         if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
