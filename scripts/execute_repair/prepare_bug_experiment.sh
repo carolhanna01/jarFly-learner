@@ -485,7 +485,7 @@ testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
 sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
-edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+edits=append;replace;delete;FUNREP;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 #edits=append;replace;delete
 #edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
 # don't know whats this used for. Ask Mau.
@@ -496,6 +496,7 @@ negativePathWeight=0.35
 positivePathWeight=0.65
 # trp for TrpAutoRepair, gp for GenProg and PAR 
 search=ga
+mutationGrouping=on
 model= RL_Epsilon_MAB
 # used only for TrpAutoRepair. value=400
 maxVariants=400
@@ -523,7 +524,7 @@ testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
 sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
-#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+#edits=append;replace;delete;FUNREP;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
 edits=append;replace;delete
 #edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
 # don't know whats this used for. Ask Mau.
@@ -536,12 +537,13 @@ positivePathWeight=0.65
 search=ga
 model= RL_Epsilon_MAB
 rewardType = average
+mutationGrouping=on
 # used only for TrpAutoRepair. value=400
 maxVariants=400
 EOM
 
-EPSILON_MAB_AVERAGE_SPECIAL_OPS_FILE=$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Epsilon_MAB_Average_Special_Ops_defects4j.config
-/bin/cat <<EOM >$EPSILON_MAB_AVERAGE_SPECIAL_OPS_FILE
+EPSILON_MAB_AVERAGE_PAR_FILE=$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Epsilon_MAB_Average_Par_defects4j.config
+/bin/cat <<EOM >$EPSILON_MAB_AVERAGE_PAR_FILE
 seed = 0
 sanity = yes
 popsize = 40
@@ -562,8 +564,49 @@ testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
 sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
-#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
-edits=appendsingle;appendspecial;replacesingle;replacespecial;deletesingle;deletespecial;appendmulti;deletemulti;replacemulti;
+edits=append;replace;delete;FUNREP;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+#edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=0.35
+positivePathWeight=0.65
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_Epsilon_MAB
+rewardType = average
+mutationGrouping=on
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
+
+EPSILON_MAB_AVERAGE_AGGRESSIVE_FILE=$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Epsilon_MAB_Average_Aggressive_defects4j.config
+/bin/cat <<EOM >$EPSILON_MAB_AVERAGE_AGGRESSIVE_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=0.1  
+# edits for PAR, GenProg, TrpAutoRepair
+edits=append;replace;delete;FUNREP;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+#edits=appendsingle;appendspecial;replacesingle;replacespecial;deletesingle;deletespecial;appendmulti;deletemulti;replacemulti;
 #edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
 # don't know whats this used for. Ask Mau.
 #model=probabilistic
@@ -577,7 +620,10 @@ model= RL_Epsilon_MAB
 rewardType = average
 # used only for TrpAutoRepair. value=400
 maxVariants=400
+mutationGrouping=on
+learningPace=everyMut
 EOM
+
 EPSILON_MAB_AVERAGE_RELATIVE_FILE=$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Epsilon_MAB_Average_Relative_defects4j.config
 /bin/cat <<EOM >$EPSILON_MAB_AVERAGE_RELATIVE_FILE
 seed = 0
@@ -600,8 +646,8 @@ testGranularity=method
 # 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
 sample=0.1  
 # edits for PAR, GenProg, TrpAutoRepair
-#edits=append;replace;delete;FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
-edits=append;replace;delete
+edits=append;replace;delete;FUNREP;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+#edits=append;replace;delete
 #edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
 # don't know whats this used for. Ask Mau.
 #model=probabilistic
@@ -617,6 +663,48 @@ fitnessType=relative
 # used only for TrpAutoRepair. value=400
 maxVariants=400
 EOM
+
+EPSILON_MAB_AVERAGE_RELATIVE_GROUPED_FILE=$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/Epsilon_MAB_Average_Relative_Grouped_defects4j.config
+/bin/cat <<EOM >$EPSILON_MAB_AVERAGE_RELATIVE_GROUPED_FILE
+seed = 0
+sanity = yes
+popsize = 40
+javaVM = $DIROFJAVA7/jre/bin/java
+workingDir = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/
+outputDir = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/tmp
+classSourceFolder = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/$SRCFOLDER
+libs = $CONFIGLIBS
+sourceDir = $WD
+positiveTests = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/pos.tests
+negativeTests = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/neg.tests
+jacocoPath = $GP4J_HOME/lib/jacocoagent.jar
+testClassPath=$TESTCP
+srcClassPath=$COMPILECP
+compileCommand = $BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/runCompile.sh
+targetClassName = $BUGWD/bugfiles.txt
+testGranularity=method
+# 0.1 for GenProg and 1.0 for TrpAutoRepair and PAR
+sample=0.1  
+# edits for PAR, GenProg, TrpAutoRepair
+edits=append;replace;delete;FUNREP;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK;LBOUNDSET;UBOUNDSET;OFFBYONE;SEQEXCH;CASTERMUT;CASTEEMUT
+#edits=append;replace;delete
+#edits=FUNREP;PARREP;PARADD;PARREM;EXPREP;EXPADD;EXPREM;NULLCHECK;OBJINIT;RANGECHECK;SIZECHECK;CASTCHECK
+# don't know whats this used for. Ask Mau.
+#model=probabilistic
+#modelPath=/home/mausoto/probGenProg/genprog4java/overallModel.txt
+# use 1.0,0.1 for TrpAutoRepair and PAR. Use 0.65 and 0.35 for GenProg
+negativePathWeight=0.35
+positivePathWeight=0.65
+# trp for TrpAutoRepair, gp for GenProg and PAR 
+search=ga
+model= RL_Epsilon_MAB
+rewardType = average
+fitnessType=relative
+mutationGrouping=on
+# used only for TrpAutoRepair. value=400
+maxVariants=400
+EOM
+
 
 DMAB_Direct_FILE=$BUGSFOLDER/$LOWERCASEPACKAGE$2Buggy/DMAB_Direct_defects4j.config
 /bin/cat <<EOM >$DMAB_Direct_FILE

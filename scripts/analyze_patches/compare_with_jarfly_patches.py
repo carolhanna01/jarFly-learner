@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import subprocess
+import re
 
 if __name__ == '__main__':
 
@@ -13,22 +14,23 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    projectName = args.dir.split("PatchedBugs_")[1].lower().strip()
     matches = 0
     uniqueMatches = 0
     prevBug = ""
     prevBugMatched = False
     for patch in sorted(os.listdir(args.dir + "/our_patches")):
-
-        bug = patch.split(".")[0].strip()
+        projectNamelower = re.split(r"([1-9])", patch)[0]
+        projectName = re.split(r"([1-9])", patch)[0].title()
+        bug = patch.split(".")[0].strip().replace(projectNamelower, "")
         seed = patch.split(".")[1].strip()
+
         relevantPatches = []
 
-        for f in sorted(os.listdir(args.dir + "/../jarfly_patches")):
-            if f.startswith(projectName + bug):
+        for f in sorted(os.listdir(args.dir + "../jarfly_patches")):
+            if f.startswith(projectNamelower + bug):
                 relevantPatches.append(f)
         for f in relevantPatches:
-            jarPatch = open(args.dir + "/../jarfly_patches/" + f)
+            jarPatch = open(args.dir + "../jarfly_patches/" + f)
             ourPatch = open(args.dir + "/our_patches/" + patch, 'r')
 
             if bug != prevBug:
@@ -37,7 +39,6 @@ if __name__ == '__main__':
             ourChangedLines = open(args.dir + "/ourTmp" , 'w')
             theirChangedLines = open(args.dir + "/theirTmp" , 'w')
             resOut = open(args.dir + "/resTmp" , 'w')
-
             for line in ourPatch.readlines():
                 if (line.startswith("+") or line.startswith("-")) and not line.startswith("++") and not line.startswith("--"):
                     ourChangedLines.write(line)
@@ -46,8 +47,9 @@ if __name__ == '__main__':
                 if (line.startswith("+") or line.startswith("-")) and not line.startswith("++") and not line.startswith("--"):
                     theirChangedLines.write(line)
 
-            subprocess.call("diff -EZBbw " +  args.dir + "/ourTmp" + " " + args.dir + "/theirTmp"  + " | wc -l > " + args.dir + "/resTmp", shell=True)
-            readRes = open(args.dir + "/resTmp" , 'r')
+            p = subprocess.Popen("diff -EZBbw " +  args.dir + "/ourTmp" + " " + args.dir + "/theirTmp"  + " | wc -l > " + args.dir + "/resTmp", shell=True)
+            p.wait()
+	    readRes = open(args.dir + "/resTmp" , 'r')
 
             if readRes.readline().strip() == str(0):
                 matches += 1
@@ -57,7 +59,6 @@ if __name__ == '__main__':
                 prevBugMatched = True
 
             prevBug = bug
-
 
     subprocess.call("echo " + "total matches= " + str(matches), shell=True)
     subprocess.call("echo " + "unique matches= " + str(uniqueMatches), shell=True)

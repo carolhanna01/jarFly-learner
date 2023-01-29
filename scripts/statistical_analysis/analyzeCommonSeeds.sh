@@ -13,23 +13,13 @@ for project in $(ls $1) ; do
     for file in $(ls $1/$project) ; do
         if [[ "$file" == "log"* ]] ; then
             logTotal=$(( logTotal + 1 ))
-            if (( $( cat $1/$project/$bug/$file | grep "Total elapsed time" | wc -l ) == 0 )) ; then
-                timedout=$(( timedout + 1 ))
-                echo $1/$project/$bug/$file 
-            fi
-            if (( $( cat $1/$project/$bug/$file | grep "Total elapsed time" | wc -l ) > 0 )) ; then
-                nottimesout=$(( nottimesout + 1 ))
-            fi
             if ( cat $1/$project/$file | grep "Repair Found" ) ; then
-                if (($found == 0)); then
+             if ( cat $2/$project/$file | grep "Repair Found" ) ; then
+		  if (($found == 0)); then
                     bugsRepaired=$(( bugsRepaired + 1 ))
                     echo $project
                     found=1
-                fi
-                if ( cat $1/$project/$file | grep "ParameterRemover" ) ; then
-                    uhoh=$(( uhoh + 1 ))
-                fi
-
+                  fi
                 time=$( cat $1/$project/$file | grep -a "Total elapsed time" | head -1 | cut -d " " -f4 )
                 currVar=$( cat $1/$project/$file | grep "Repair Found" | grep  -o 'variant[0-9]*' | grep  -o '[0-9]*')
                 totalRepairVariant=$(( totalRepairVariant + currVar ))
@@ -38,6 +28,7 @@ for project in $(ls $1) ; do
                 echo $time >> time_data
                 echo $currVar >> variant_data
             fi
+	  fi	
         fi
     done
 done
