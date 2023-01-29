@@ -1,6 +1,6 @@
 Artifact for the paper "Reinforcement Learning for Mutation Operator Selection in Automated Program Repair". This repository includes a modified version of the [JarFly](https://github.com/squaresLab/genprog4java) framework that implements our approach, our results, as well as instructions and scripts for replication.
 
-Repository structure:
+# Repository structure:
 
 **src**: modified version of the JarFly framework that includes our implementations.
 
