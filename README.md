@@ -22,4 +22,51 @@ sh ./scripts/analyze_patches/find_patch_files.py --dir *output_dir*
 
 **bug_file**: path to bug file that you wish to launch repair attempts on (e.g. ./bug/d4j_v1.1.0_patched_bugs to lanch repair attempts for the set of 49 bugs that JarFly reports to patch using GenProg)
 
-**config_file**: name of config file depending on the experiment that you wish to run (e.g. Epsilon_MAB_Average_Relative_defects4j for epsilon greedy with average credit assignment and relative fitness as rewards. See ./execute_repair/prepare_bug_experiment.sh for full list)
+**config**: name of config file depending on the experiment that you wish to run (e.g. Epsilon_MAB_Average_Relative_defects4j for epsilon greedy with average credit assignment and relative fitness as rewards)
+
+## RQ1 + 2:
+
+### **bug_file**:
+
+./scripts/bugs/d4j_v1.1.0_patched_bugs
+
+### **config**:
+
+Depending on experiment you want to lanch choose config name. Config name format: selectionAlgorithm_creditAssignment_defects4j
+
+PM_Direct_defects4j
+
+PM_Average_defects4j
+
+AP_Direct_defects4j
+
+AP_Average_defects4j
+
+MAB_Direct_defects4j
+
+MAB_Average_defects4j
+
+Epsilon_MAB_Direct_defects4j
+
+Epsilon_MAB_Average_defects4j
+
+## RQ3:
+
+### **bug_file**:
+
+Use ./scripts/bugs/d4j_v1.1.0_par_patched_bugs
+
+### **config**:
+
+Use Epsilon_MAB_Average_Par_defects4j for epsilon-greedy with average credit assignment and relative fitness value as reward with par mutations.
+
+## RQ4:
+
+### **bug_file**:
+
+Use ./scripts/bugs/d4j_v1.1.0_patched_bugs and d4j_v1.1.0_unpatched_bugs for the full 353 bug evaluation.
+
+### **config**:
+
+Use Epsilon_MAB_Average_Relative_Grouped_defects4j for epsilon-greedy with average credit assignment and relative fitness value as reward with grouped par mutations.
+
