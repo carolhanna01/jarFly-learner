@@ -12,6 +12,8 @@ Here you can find the relevant bugs from the Defects4J bachmark that we used in 
 # Replication Instructions:
 
 sh ./execute_repair/execute.sh output_dir bug_file config_file
+
+
 sh ./statistical_analysis.sh output_dir
 
 **output_dir**: path to location for storing outputs
