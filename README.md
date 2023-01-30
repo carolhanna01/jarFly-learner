@@ -6,8 +6,6 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 
 **reports**: supplementary material including systematic overview of the tools that we considered as well as the results of our literature review.
 
-**results**: experiment results including logs, patches, and plots. 
-
 **scripts**: the scripts we used for executing the repair attempts with the different settings and evaluating their outputs. We also include replication instructions for all of our experiments.
 
 # Replication Instructions:
@@ -28,7 +26,7 @@ sh ./scripts/analyze_patches/find_patch_files.py --dir *output_dir*
 
 ### **bug_file**:
 
-./scripts/bugs/d4j_v1.1.0_patched_bugs
+Use ./scripts/bugs/d4j_v1.1.0_patched_bugs
 
 ### **config**:
 
