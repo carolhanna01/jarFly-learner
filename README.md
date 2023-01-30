@@ -14,7 +14,7 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 
 sh ./scripts/execute_repair/execute.sh *output_dir* *bug_file* *config_file*
 
-sh ./scripts/statistical_analysis.sh *output_dir*
+sh ./scripts/statistical_analysis/countSeedSucess.sh.sh *output_dir*
 
 sh ./scripts/analyze_patches/find_patch_files.py --dir *output_dir*
 
