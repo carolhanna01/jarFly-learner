@@ -29,13 +29,13 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 
 **config**: name of config file depending on the experiment that you wish to run (e.g. Epsilon_MAB_Average_Relative_defects4j for epsilon greedy with average credit assignment and relative fitness as rewards)
 
-## RQ1 + 2:
+### RQ1 + 2:
 
-### **bug_file**:
+#### **bug_file**:
 
 Use ./scripts/bugs/d4j_v1.1.0_patched_bugs
 
-### **config**:
+#### **config**:
 
 Depending on experiment you want to lanch choose config name. Config name format: selectionAlgorithm_creditAssignment_defects4j
 
@@ -55,23 +55,23 @@ Epsilon_MAB_Direct_defects4j
 
 Epsilon_MAB_Average_defects4j
 
-## RQ3:
+### RQ3:
 
-### **bug_file**:
+#### **bug_file**:
 
 Use ./scripts/bugs/d4j_v1.1.0_par_patched_bugs
 
-### **config**:
+#### **config**:
 
 Use Epsilon_MAB_Average_Par_defects4j for epsilon-greedy with average credit assignment and relative fitness value as reward with par mutations.
 
-## RQ4:
+### RQ4:
 
-### **bug_file**:
+#### **bug_file**:
 
 Use ./scripts/bugs/d4j_v1.1.0_patched_bugs and d4j_v1.1.0_unpatched_bugs for the full 353 bug evaluation.
 
-### **config**:
+#### **config**:
 
 Use Epsilon_MAB_Average_Relative_Grouped_defects4j for epsilon-greedy with average credit assignment and relative fitness value as reward with grouped par mutations.
 
