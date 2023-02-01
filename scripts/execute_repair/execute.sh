@@ -18,12 +18,12 @@ while read p; do
         fi
 
 	
-       /scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/scripts/prepare_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) humanMade 100 $D4J_HOME/patched /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  \"false\" ./ \"false\" ./
+       $GP4J_HOME/scripts/execute_repair/prepare_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) humanMade 100 $D4J_HOME/patched /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  \"false\" ./ \"false\" ./
 	
 	
 	echo "Starting repair"
 	
-	/scratch0/channa/$JOB_ID.$SGE_TASK_ID/jarFly-learner/scripts/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" $3 PatchedBugs_$1
+	$GP4J_HOME/scripts/execute_repair/repair_bug_experiment.sh  $(echo $p | cut -d " " -f1) $(echo $p | cut -d " " -f2) allHuman 100 $D4J_HOME/patched ${SGE_TASK_ID} ${SGE_TASK_ID} false /share/apps/jdk1.8.0_131 /share/apps/jdk1.8.0_131  false \"\" false \"\" $3 PatchedBugs_$1
 
 	rm -rf $D4J_HOME/patched/*
        	
