@@ -10,11 +10,18 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 
 # Replication Instructions:
 
-sh ./scripts/execute_repair/execute.sh *output_dir* *bug_file* *config_file*
+## Set UP
 
-sh ./scripts/statistical_analysis/countSeedSucess.sh.sh *output_dir*
+* Clone repository and set GP4J environment variable to the repository root path.
+* Clone and initialize [Defects4J](https://github.com/rjust/defects4j). Set D4J_HOME environment variable to the destination path.
 
-sh ./scripts/analyze_patches/find_patch_files.py --dir *output_dir*
+## Execute:
+
+* sh ./scripts/execute_repair/execute.sh *output_dir* *bug_file* *config_file*
+
+* sh ./scripts/statistical_analysis/countSeedSucess.sh.sh *output_dir*
+
+* sh ./scripts/analyze_patches/find_patch_files.py --dir *output_dir*
 
 **output_dir**: path to location for storing outputs
 
