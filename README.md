@@ -10,7 +10,7 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 
 # Replication Instructions:
 
-## Set UP
+## Set Up
 
 * Clone repository and set GP4J_HOME environment variable to the repository root path.
 * Clone and initialize [Defects4J](https://github.com/rjust/defects4j). Set D4J_HOME environment variable to the destination path.
