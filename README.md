@@ -1,8 +1,8 @@
-Artifact for the paper "Reinforcement Learning for Mutation Operator Selection in Automated Program Repair". This repository includes a modified version of the [JarFly](https://github.com/squaresLab/genprog4java) framework that implements our approach as well as instructions and scripts for replication. Results separately available on Zenodo (to be made public after review period for anonymity purposes).
+Artifact for the paper "Reinforcement Learning for Mutation Operator Selection in Automated Program Repair". This repository includes a modified version of the [JaRFly](https://github.com/squaresLab/genprog4java) framework that implements our approach as well as instructions and scripts for replication. Results separately available on Zenodo (to be made public after review period for anonymity purposes).
 
 # Repository structure:
 
-**src**: modified version of the JarFly framework that includes our implementations.
+**src**: modified version of the JaRFly framework that includes our implementations.
 
 **reports**: supplementary material including systematic overview of the tools that we considered as well as the results of our literature review.
 
@@ -11,7 +11,7 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 # Replication Instructions:
 
 ## Dependencies
-Requirements are the same ones needed to set up [Defects4J](https://github.com/rjust/defects4j) and [JarFly](https://github.com/squaresLab/genprog4java), namely:
+Requirements are the same ones needed to set up [Defects4J](https://github.com/rjust/defects4j) and [JaRFly](https://github.com/squaresLab/genprog4java), namely:
 
 * Java 1.8
 * Git >= 1.9
@@ -34,7 +34,7 @@ Additionally, a unix shell for running our execution and analysis scripts.
 
 **output_dir**: path to location for storing outputs
 
-**bug_file**: path to bug file that you wish to launch repair attempts on (e.g. ./bug/d4j_v1.1.0_patched_bugs to lanch repair attempts for the set of 49 bugs that JarFly reports to patch using GenProg)
+**bug_file**: path to bug file that you wish to launch repair attempts on (e.g. ./bug/d4j_v1.1.0_patched_bugs to lanch repair attempts for the set of 49 bugs that JaRFly reports to patch using GenProg)
 
 **config**: name of config file depending on the experiment that you wish to run (e.g. Epsilon_MAB_Average_Relative_defects4j for epsilon greedy with average credit assignment and relative fitness as rewards)
 
