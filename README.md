@@ -10,6 +10,15 @@ Artifact for the paper "Reinforcement Learning for Mutation Operator Selection i
 
 # Replication Instructions:
 
+## Dependencies
+Requirements are the same ones needed to set up [Defects4J](https://github.com/rjust/defects4j) and [JarFly](https://github.com/squaresLab/genprog4java), namely:
+
+* Java 1.8
+* Git >= 1.9
+* Perl >= 5.0.12
+
+Additionally, a unix shell for running our execution and analysis scripts.
+
 ## Set Up
 
 * Clone repository and set GP4J_HOME environment variable to the repository root path.
